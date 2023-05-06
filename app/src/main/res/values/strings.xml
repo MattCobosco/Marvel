@@ -3,4 +3,8 @@
     <string name="subtitle">Character Library</string>
     <string name="author_name">Author: Mateusz Kałucki</string>
     <string name="logo_description">Marvel Logo</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_characters">Characters</string>
+    <string name="title_comics">Comics</string>
+    <string name="title_creators">Creators</string>
 </resources>

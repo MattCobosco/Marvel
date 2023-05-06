@@ -1,4 +1,4 @@
-package core.models;
+package core.models.DTOs;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package core.models;
+package core.models.DTOs;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -104,7 +104,7 @@ public class ImageDto {
 
         private final String size;
 
-        private Size(final String size) {
+        Size(final String size) {
             this.size = size;
         }
 

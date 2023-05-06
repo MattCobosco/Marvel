@@ -44,8 +44,8 @@ public class CharactersFragment extends Fragment {
 
         adapter = new CharacterAdapter(characters);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        binding.recyclerView.setLayoutManager(layoutManager);
-        binding.recyclerView.setAdapter(adapter);
+        binding.charactersRecyclerView.setLayoutManager(layoutManager);
+        binding.charactersRecyclerView.setAdapter(adapter);
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 

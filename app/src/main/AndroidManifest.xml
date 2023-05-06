@@ -16,6 +16,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.characters.CharacterCardActivity"
+            android:exported="false"
+            android:label="@string/title_activity_character_card"
+            android:theme="@style/Theme.Marvel">
+            <intent-filter>
+                <action android:name="pl.wsei.marvel.ACTION_VIEW_CHARACTER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".NavigationActivity"
             android:exported="false"
             android:label="@string/title_activity_navigation" />
@@ -24,13 +34,9 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
     </application>
 
 </manifest>

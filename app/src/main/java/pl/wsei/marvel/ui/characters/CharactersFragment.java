@@ -54,7 +54,7 @@ public class CharactersFragment extends Fragment {
 
             CharacterClient characterClient = new CharacterClient(marvelApiConfig);
 
-            CharactersQuery query = CharactersQuery.Builder.create().build();
+            CharactersQuery query = CharactersQuery.Builder.create().withLimit(100).build();
 
             return characterClient.getAll(query);
         };

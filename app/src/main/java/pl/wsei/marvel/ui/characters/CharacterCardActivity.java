@@ -3,10 +3,12 @@ package pl.wsei.marvel.ui.characters;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
 
@@ -28,7 +30,6 @@ import pl.wsei.marvel.R;
 import pl.wsei.marvel.adapters.CharacterSeriesAdapter;
 
 public class CharacterCardActivity extends AppCompatActivity {
-
     private CharacterDto character;
 
     @Override
@@ -58,7 +59,12 @@ public class CharacterCardActivity extends AppCompatActivity {
             nameTextView.setText(character.getName());
 
             TextView descriptionTextView = findViewById(R.id.character_description);
+
             descriptionTextView.setText(character.getDescription());
+            if (character.getDescription().isEmpty()) {
+                NestedScrollView characterDescriptionNestedScroll = findViewById(R.id.character_description_scroll);
+                characterDescriptionNestedScroll.getLayoutParams().height = 0;
+            }
 
             ImageView imageView = findViewById(R.id.character_image);
             Glide.with(this).load(character.getThumbnail().getImageUrl(ImageDto.Size.FULLSIZE)).into(imageView);

@@ -14,8 +14,8 @@
             android:id="@+id/character_image"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:adjustViewBounds="true"
             android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@drawable/character_placeholder" />
 
@@ -47,37 +47,45 @@
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/character_description_scroll"
             android:layout_width="match_parent"
             android:layout_height="100dp">
 
             <TextView
                 android:id="@+id/character_description"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content"
                 android:text="Description"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
+
         </androidx.core.widget.NestedScrollView>
 
-        <TextView
-            android:id="@+id/character_series_title"
+        <LinearLayout
+            android:id="@+id/character_comics"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Comics"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/character_series_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:nestedScrollingEnabled="true"
-            android:padding="16dp" />
+            <TextView
+                android:id="@+id/character_series_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Comics"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/character_series_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true"
+                android:padding="16dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

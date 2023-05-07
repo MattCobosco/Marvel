@@ -95,11 +95,11 @@ public class CharacterCardActivity extends AppCompatActivity {
             if (characterFavorite.getDrawable().getConstantState() == this.getDrawable(this.notFavoriteIcon).getConstantState()) {
                 characterFavorite.setImageResource(this.favoriteIcon);
                 this.favoriteTableManager.addFavorite(favorite);
-                Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, String.format("Added %s to favorites", character.getName()), Toast.LENGTH_SHORT).show();
             } else {
                 characterFavorite.setImageResource(this.notFavoriteIcon);
                 this.favoriteTableManager.removeFavorite(favorite);
-                Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, String.format("Removed %s from favorites", character.getName()), Toast.LENGTH_SHORT).show();
             }
         });
     }

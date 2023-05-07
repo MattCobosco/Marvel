@@ -16,10 +16,10 @@ import pl.wsei.marvel.R;
 
 public class CharacterSeriesAdapter extends ArrayAdapter<String> {
 
-    private Context context;
-    private List<String> series;
+    private final Context context;
+    private final List<String> series;
 
-    public CharacterSeriesAdapter(Context context, List<String> series) {
+    public CharacterSeriesAdapter(final Context context, final List<String> series) {
         super(context, R.layout.character_series, series);
         this.context = context;
         this.series = series;
@@ -27,13 +27,13 @@ public class CharacterSeriesAdapter extends ArrayAdapter<String> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent) {
         View view = convertView;
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.character_series, parent, false);
+        if (null == view) {
+            view = LayoutInflater.from(this.context).inflate(R.layout.character_series, parent, false);
         }
-        String seriesName = getItem(position);
-        TextView seriesTextView = view.findViewById(R.id.character_series_name);
+        final String seriesName = this.getItem(position);
+        final TextView seriesTextView = view.findViewById(R.id.character_series_name);
         seriesTextView.setText(seriesName);
         return view;
     }

@@ -9,11 +9,11 @@ public class ComicsViewModel extends ViewModel {
     private final MutableLiveData<String> mText;
 
     public ComicsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        this.mText = new MutableLiveData<>();
+        this.mText.setValue("This is dashboard fragment");
     }
 
     public LiveData<String> getText() {
-        return mText;
+        return this.mText;
     }
 }

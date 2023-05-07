@@ -1,4 +1,4 @@
-package core.models.DTOs;
+package core.api.models.DTOs;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -15,44 +15,44 @@ public class BaseResponse<T> {
     public BaseResponse() {
     }
 
-    public BaseResponse(BaseResponse marvelResponse) {
-        code = marvelResponse.getCode();
-        status = marvelResponse.getStatus();
-        copyright = marvelResponse.getCopyright();
-        attributionText = marvelResponse.getAttributionText();
-        getAttributionHtml = marvelResponse.getGetAttributionHtml();
-        etag = marvelResponse.getEtag();
+    public BaseResponse(final BaseResponse marvelResponse) {
+        this.code = marvelResponse.code;
+        this.status = marvelResponse.status;
+        this.copyright = marvelResponse.copyright;
+        this.attributionText = marvelResponse.attributionText;
+        this.getAttributionHtml = marvelResponse.getAttributionHtml;
+        this.etag = marvelResponse.etag;
     }
 
     public int getCode() {
-        return code;
+        return this.code;
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public String getCopyright() {
-        return copyright;
+        return this.copyright;
     }
 
     public String getAttributionText() {
-        return attributionText;
+        return this.attributionText;
     }
 
     public String getGetAttributionHtml() {
-        return getAttributionHtml;
+        return this.getAttributionHtml;
     }
 
     public T getResponse() {
-        return response;
+        return this.response;
     }
 
     public String getEtag() {
-        return etag;
+        return this.etag;
     }
 
-    public void setResponse(T response) {
+    public void setResponse(final T response) {
         this.response = response;
     }
 }

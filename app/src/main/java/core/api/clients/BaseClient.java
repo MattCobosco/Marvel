@@ -1,4 +1,4 @@
-package core.clients;
+package core.api.clients;
 
 import java.io.IOException;
 
@@ -10,19 +10,19 @@ import retrofit2.Response;
 public class BaseClient {
     private final MarvelApiConfig marvelApiConfig;
 
-    public BaseClient(MarvelApiConfig marvelApiConfig) {
+    public BaseClient(final MarvelApiConfig marvelApiConfig) {
         this.marvelApiConfig = marvelApiConfig;
     }
 
-    <T> T getApi(Class<T> apiRest) {
-        return marvelApiConfig.getRetrofit().create(apiRest);
+    <T> T getApi(final Class<T> apiRest) {
+        return this.marvelApiConfig.getRetrofit().create(apiRest);
     }
 
-    public <T> T execute(Call<T> call) throws IOException {
-        Response<T> response = null;
+    public <T> T execute(final Call<T> call) throws IOException {
+        Response<T> response;
         try {
             response = call.execute();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new IOException("Network error", e);
         }
         if (response.isSuccessful()) {

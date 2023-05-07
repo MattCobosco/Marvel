@@ -1,4 +1,4 @@
-package core.models.DTOs;
+package core.api.models.DTOs;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -15,18 +15,18 @@ public class ResourcesDto<T> {
     private List<T> items;
 
     public int getAvailable() {
-        return available;
+        return this.available;
     }
 
     public int getReturned() {
-        return returned;
+        return this.returned;
     }
 
     public String getCollectionUri() {
-        return collectionUri;
+        return this.collectionUri;
     }
 
     public List<T> getItems() {
-        return items;
+        return this.items;
     }
 }

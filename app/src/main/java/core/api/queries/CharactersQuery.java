@@ -1,4 +1,4 @@
-package core.queries;
+package core.api.queries;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,8 +31,8 @@ public class CharactersQuery {
     private final int limit;
     private final int offset;
 
-    private CharactersQuery(String name, String nameStartWith, String modifiedSince, String comics,
-                            String series, String events, String stories, String orderBy, int limit, int offset) {
+    private CharactersQuery(final String name, final String nameStartWith, final String modifiedSince, final String comics,
+                            final String series, final String events, final String stories, final String orderBy, final int limit, final int offset) {
         this.name = name;
         this.nameStartWith = nameStartWith;
         this.modifiedSince = modifiedSince;
@@ -46,46 +46,46 @@ public class CharactersQuery {
     }
 
     public Map<String, Object> toMap() {
-        Map<String, Object> returnValues = new HashMap<>();
+        final Map<String, Object> returnValues = new HashMap<>();
 
-        if (name != null) {
-            returnValues.put(CharactersQuery.QUERY_NAME, name);
+        if (null != name) {
+            returnValues.put(QUERY_NAME, this.name);
         }
 
-        if (nameStartWith != null) {
-            returnValues.put(CharactersQuery.QUERY_NAME_START_WITH, nameStartWith);
+        if (null != nameStartWith) {
+            returnValues.put(QUERY_NAME_START_WITH, this.nameStartWith);
         }
 
-        if (modifiedSince != null) {
-            returnValues.put(CharactersQuery.QUERY_MODIFIED_SINCE, modifiedSince);
+        if (null != modifiedSince) {
+            returnValues.put(QUERY_MODIFIED_SINCE, this.modifiedSince);
         }
 
-        if (comics != null) {
-            returnValues.put(CharactersQuery.QUERY_COMICS, comics);
+        if (null != comics) {
+            returnValues.put(QUERY_COMICS, this.comics);
         }
 
-        if (series != null) {
-            returnValues.put(CharactersQuery.QUERY_SERIES, series);
+        if (null != series) {
+            returnValues.put(QUERY_SERIES, this.series);
         }
 
-        if (events != null) {
-            returnValues.put(CharactersQuery.QUERY_EVENTS, events);
+        if (null != events) {
+            returnValues.put(QUERY_EVENTS, this.events);
         }
 
-        if (stories != null) {
-            returnValues.put(CharactersQuery.QUERY_STORIES, stories);
+        if (null != stories) {
+            returnValues.put(QUERY_STORIES, this.stories);
         }
 
-        if (orderBy != null) {
-            returnValues.put(CharactersQuery.QUERY_ORDER_BY, orderBy);
+        if (null != orderBy) {
+            returnValues.put(QUERY_ORDER_BY, this.orderBy);
         }
 
-        if (limit > 0) {
-            returnValues.put(CharactersQuery.QUERY_LIMIT, limit);
+        if (0 < limit) {
+            returnValues.put(QUERY_LIMIT, this.limit);
         }
 
-        if (offset > 0) {
-            returnValues.put(CharactersQuery.QUERY_OFFSET, offset);
+        if (0 < offset) {
+            returnValues.put(QUERY_OFFSET, this.offset);
         }
 
         return returnValues;
@@ -93,7 +93,7 @@ public class CharactersQuery {
 
 
     public static class Builder {
-        public final static int MAX_SIZE = 100;
+        public static final int MAX_SIZE = 100;
 
         public static final String LIST_SEPARATOR = ",";
         private String name;
@@ -115,85 +115,85 @@ public class CharactersQuery {
             return new Builder();
         }
 
-        public Builder withName(String name) {
+        public Builder withName(final String name) {
             this.name = name;
             return this;
         }
 
-        public Builder withNameStartWith(String nameStartWith) {
+        public Builder withNameStartWith(final String nameStartWith) {
             this.nameStartWith = nameStartWith;
             return this;
         }
 
-        public Builder withModifiedSince(Date modifiedSince) {
+        public Builder withModifiedSince(final Date modifiedSince) {
             this.modifiedSince = modifiedSince;
             return this;
         }
 
-        public Builder addComic(int comic) {
-            comics.add(comic);
+        public Builder addComic(final int comic) {
+            this.comics.add(comic);
             return this;
         }
 
-        public Builder addComics(List<Integer> comics) {
-            checkNull(comics);
+        public Builder addComics(final List<Integer> comics) {
+            this.checkNull(comics);
             this.comics.addAll(comics);
             return this;
         }
 
-        public Builder addSerie(int serie) {
-            series.add(serie);
+        public Builder addSerie(final int serie) {
+            this.series.add(serie);
             return this;
         }
 
-        public Builder addSeries(List<Integer> series) {
-            checkNull(series);
+        public Builder addSeries(final List<Integer> series) {
+            this.checkNull(series);
             this.series.addAll(series);
             return this;
         }
 
-        public Builder addEvent(int event) {
-            events.add(event);
+        public Builder addEvent(final int event) {
+            this.events.add(event);
             return this;
         }
 
-        public Builder addEvents(List<Integer> events) {
-            checkNull(events);
+        public Builder addEvents(final List<Integer> events) {
+            this.checkNull(events);
             this.events.addAll(events);
             return this;
         }
 
-        public Builder addStory(int story) {
-            stories.add(story);
+        public Builder addStory(final int story) {
+            this.stories.add(story);
             return this;
         }
 
-        public Builder addStory(List<Integer> stories) {
-            checkNull(stories);
+        public Builder addStory(final List<Integer> stories) {
+            this.checkNull(stories);
             this.stories.addAll(stories);
             return this;
         }
 
-        public Builder withOrderBy(String orderBy, boolean ascendant) {
+        public Builder withOrderBy(final String orderBy, final boolean ascendant) {
             this.orderBy = orderBy;
-            this.orderByAscendant = ascendant;
+            orderByAscendant = ascendant;
             return this;
         }
 
-        public Builder withOrderBy(String orderBy) {
+        public Builder withOrderBy(final String orderBy) {
             this.orderBy = orderBy;
-            this.orderByAscendant = true;
+            orderByAscendant = true;
             return this;
         }
 
-        public Builder withLimit(int limit) {
-            checkLimit(limit);
+        public Builder withLimit(final int limit) {
+            this.checkLimit(limit);
             this.limit = limit;
             return this;
         }
 
-        public Builder withOffset(int offset) {
-            if (offset < 0) {
+        public Builder withOffset(final int offset) {
+            if (0 > offset) {
                 throw new IllegalArgumentException("offset must be bigger or equals than zero");
             }
 
@@ -202,53 +202,53 @@ public class CharactersQuery {
         }
 
         public CharactersQuery build() {
-            String plainModifedSince = convertDate(modifiedSince);
-            String plainComics = convertToList(comics);
-            String plainEvents = convertToList(events);
-            String plainSeries = convertToList(series);
-            String plainStories = convertToList(stories);
-            String plainOrderBy = convertOrderBy(orderBy, orderByAscendant);
+            final String plainModifedSince = this.convertDate(this.modifiedSince);
+            final String plainComics = this.convertToList(this.comics);
+            final String plainEvents = this.convertToList(this.events);
+            final String plainSeries = this.convertToList(this.series);
+            final String plainStories = this.convertToList(this.stories);
+            final String plainOrderBy = this.convertOrderBy(this.orderBy, this.orderByAscendant);
 
-            return new CharactersQuery(name, nameStartWith, plainModifedSince, plainComics, plainSeries,
-                    plainEvents, plainStories, plainOrderBy, limit, offset);
+            return new CharactersQuery(this.name, this.nameStartWith, plainModifedSince, plainComics, plainSeries,
+                    plainEvents, plainStories, plainOrderBy, this.limit, this.offset);
         }
 
-        private void checkLimit(int limit) {
-            if (limit <= 0) {
+        private void checkLimit(final int limit) {
+            if (0 >= limit) {
                 throw new IllegalArgumentException("limit must be bigger than zero");
             }
 
-            if (limit > MAX_SIZE) {
+            if (MAX_SIZE < limit) {
                 throw new IllegalArgumentException("limit must be smaller than 100");
             }
         }
 
-        private void checkNull(List<Integer> list) {
-            if (list == null) {
+        private void checkNull(final List<Integer> list) {
+            if (null == list) {
                 throw new IllegalArgumentException("the collection can not be null");
             }
         }
 
-        private String convertDate(Date date) {
-            if (date == null) {
+        private String convertDate(final Date date) {
+            if (null == date) {
                 return null;
             }
             return DateUtil.parseDate(date);
         }
 
-        private String convertOrderBy(String orderBy, boolean ascendant) {
-            if (orderBy == null) {
+        private String convertOrderBy(final String orderBy, final boolean ascendant) {
+            if (null == orderBy) {
                 return null;
             }
             return (ascendant) ? orderBy : "-" + orderBy;
         }
 
-        private String convertToList(List<Integer> list) {
+        private String convertToList(final List<Integer> list) {
             String plainList = "";
             for (int i = 0; i < list.size(); i++) {
                 plainList += Integer.toString(list.get(i));
                 if (i < list.size() - 1) {
-                    plainList += LIST_SEPARATOR;
+                    plainList += Builder.LIST_SEPARATOR;
                 }
             }
             return (plainList.isEmpty()) ? null : plainList;

@@ -1,4 +1,4 @@
-package core.models;
+package core.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -13,22 +13,22 @@ public class Collection<T> {
     @SerializedName("results") private final List<T> results = new ArrayList<>();
 
     public int getOffset() {
-        return offset;
+        return this.offset;
     }
 
     public int getLimit() {
-        return limit;
+        return this.limit;
     }
 
     public int getTotal() {
-        return total;
+        return this.total;
     }
 
     public int getCount() {
-        return count;
+        return this.count;
     }
 
     protected List<T> getResults() {
-        return results;
+        return this.results;
     }
 }

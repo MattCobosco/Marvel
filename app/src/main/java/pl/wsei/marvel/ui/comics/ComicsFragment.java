@@ -16,22 +16,22 @@ public class ComicsFragment extends Fragment {
 
     private FragmentComicsBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        ComicsViewModel comicsViewModel =
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             final ViewGroup container, final Bundle savedInstanceState) {
+        final ComicsViewModel comicsViewModel =
                 new ViewModelProvider(this).get(ComicsViewModel.class);
 
-        binding = FragmentComicsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        this.binding = FragmentComicsBinding.inflate(inflater, container, false);
+        final View root = this.binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        comicsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        TextView textView = this.binding.textDashboard;
+        comicsViewModel.getText().observe(this.getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        this.binding = null;
     }
 }

@@ -16,22 +16,22 @@ public class CreatorsFragment extends Fragment {
 
     private FragmentCreatorsBinding binding;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        CreatorsViewModel creatorsViewModel =
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             final ViewGroup container, final Bundle savedInstanceState) {
+        final CreatorsViewModel creatorsViewModel =
                 new ViewModelProvider(this).get(CreatorsViewModel.class);
 
-        binding = FragmentCreatorsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        this.binding = FragmentCreatorsBinding.inflate(inflater, container, false);
+        final View root = this.binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
-        creatorsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        TextView textView = this.binding.textNotifications;
+        creatorsViewModel.getText().observe(this.getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        this.binding = null;
     }
 }

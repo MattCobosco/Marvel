@@ -18,24 +18,24 @@ public class NavigationActivity extends AppCompatActivity {
     private ActivityNavigationBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityNavigationBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        this.binding = ActivityNavigationBinding.inflate(this.getLayoutInflater());
+        this.setContentView(this.binding.getRoot());
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        final Toolbar toolbar = this.findViewById(R.id.toolbar);
+        this.setSupportActionBar(toolbar);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        final BottomNavigationView navView = this.findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+        final AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_characters, R.id.navigation_comics, R.id.navigation_creators)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_navigation);
+        final NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_navigation);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        NavigationUI.setupWithNavController(this.binding.navView, navController);
     }
 
 }

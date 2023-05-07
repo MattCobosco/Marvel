@@ -1,9 +1,9 @@
-package core.clients;
+package core.api.clients;
 
 import java.util.Map;
 
-import core.models.DTOs.BaseResponse;
-import core.models.DTOs.CharactersDto;
+import core.api.models.DTOs.BaseResponse;
+import core.api.models.DTOs.CharactersDto;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

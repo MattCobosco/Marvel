@@ -1,4 +1,4 @@
-package core.models.DTOs;
+package core.api.models.DTOs;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -11,18 +11,18 @@ public class ImageDto {
     private String extension;
 
     public String getPath() {
-        return path;
+        return this.path;
     }
 
     public String getExtension() {
-        return extension;
+        return this.extension;
     }
 
-    public String getImageUrl(Size size) {
-        if (size == Size.FULLSIZE) {
-            return path + DOT + extension;
+    public String getImageUrl(final Size size) {
+        if (Size.FULLSIZE == size) {
+            return this.path + ImageDto.DOT + this.extension;
         } else {
-            return path + SEPARATOR + size.toString() + DOT + extension;
+            return this.path + ImageDto.SEPARATOR + size.toString() + ImageDto.DOT + this.extension;
         }
     }
 
@@ -104,13 +104,13 @@ public class ImageDto {
 
         private final String size;
 
-        Size(final String size) {
+        Size(String size) {
             this.size = size;
         }
 
         @Override
         public String toString() {
-            return size;
+            return this.size;
         }
     }
 }

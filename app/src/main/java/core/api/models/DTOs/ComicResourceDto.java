@@ -1,4 +1,4 @@
-package core.models.DTOs;
+package core.api.models.DTOs;
 
 public class ComicResourceDto extends ResourceDto {
 }

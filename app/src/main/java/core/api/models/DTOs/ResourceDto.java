@@ -1,4 +1,4 @@
-package core.models.DTOs;
+package core.api.models.DTOs;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,10 +9,10 @@ public class ResourceDto {
     private String name;
 
     public String getResourceUri() {
-        return resourceUri;
+        return this.resourceUri;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 }

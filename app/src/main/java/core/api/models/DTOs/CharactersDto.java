@@ -1,11 +1,11 @@
-package core.models.DTOs;
+package core.api.models.DTOs;
 
 import java.util.List;
 
-import core.models.Collection;
+import core.api.models.Collection;
 
 public class CharactersDto extends Collection<CharacterDto> {
     public List<CharacterDto> getCharacters() {
-        return getResults();
+        return this.getResults();
     }
 }

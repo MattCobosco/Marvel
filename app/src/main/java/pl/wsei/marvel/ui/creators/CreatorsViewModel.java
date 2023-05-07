@@ -9,11 +9,11 @@ public class CreatorsViewModel extends ViewModel {
     private final MutableLiveData<String> mText;
 
     public CreatorsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        this.mText = new MutableLiveData<>();
+        this.mText.setValue("This is notifications fragment");
     }
 
     public LiveData<String> getText() {
-        return mText;
+        return this.mText;
     }
 }

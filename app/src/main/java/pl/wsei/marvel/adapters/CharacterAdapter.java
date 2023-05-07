@@ -14,29 +14,29 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import core.models.CharacterRow;
+import core.api.models.CharacterRow;
 import pl.wsei.marvel.R;
 import pl.wsei.marvel.ui.characters.CharacterCardActivity;
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.ViewHolder> {
 
-    private List<CharacterRow> characters;
+    private final List<CharacterRow> characters;
 
-    public CharacterAdapter(List<CharacterRow> characters) {
+    public CharacterAdapter(final List<CharacterRow> characters) {
         this.characters = characters;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+    public ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+        final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_character_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CharacterRow characterRow = characters.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        final CharacterRow characterRow = this.characters.get(position);
         holder.nameTextView.setText(characterRow.getName());
         holder.descriptionTextView.setText(characterRow.getDescription());
         Glide.with(holder.itemView.getContext())
@@ -44,21 +44,18 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.View
                 .placeholder(R.drawable.character_placeholder)
                 .into(holder.thumbnailImageView);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String characterId = characterRow.getId();
+        holder.itemView.setOnClickListener(v -> {
+            final String characterId = characterRow.getId();
 
-                Intent intent = new Intent(v.getContext(), CharacterCardActivity.class);
-                intent.putExtra("character_id", characterId);
-                v.getContext().startActivity(intent);
-            }
+            final Intent intent = new Intent(v.getContext(), CharacterCardActivity.class);
+            intent.putExtra("character_id", characterId);
+            v.getContext().startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return characters.size();
+        return this.characters.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -66,11 +63,11 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.View
         public TextView nameTextView;
         public TextView descriptionTextView;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
-            thumbnailImageView = itemView.findViewById(R.id.character_image);
-            nameTextView = itemView.findViewById(R.id.character_name);
-            descriptionTextView = itemView.findViewById(R.id.character_description);
+            this.thumbnailImageView = itemView.findViewById(R.id.character_image);
+            this.nameTextView = itemView.findViewById(R.id.character_name);
+            this.descriptionTextView = itemView.findViewById(R.id.character_description);
         }
     }
 }

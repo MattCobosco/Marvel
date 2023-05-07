@@ -1,4 +1,4 @@
-package core.models.DTOs;
+package core.api.models.DTOs;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,10 +9,10 @@ public class UrlDto {
     private String url;
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public String getUrl() {
-        return url;
+        return this.url;
     }
 }

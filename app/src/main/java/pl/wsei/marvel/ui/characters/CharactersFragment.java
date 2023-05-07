@@ -19,60 +19,59 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import core.MarvelApiConfig;
-import core.clients.CharacterClient;
-import core.models.CharacterRow;
-import core.models.DTOs.BaseResponse;
-import core.models.DTOs.CharacterDto;
-import core.models.DTOs.CharactersDto;
-import core.queries.CharactersQuery;
+import core.api.clients.CharacterClient;
+import core.api.models.CharacterRow;
+import core.api.models.DTOs.BaseResponse;
+import core.api.models.DTOs.CharacterDto;
+import core.api.models.DTOs.CharactersDto;
+import core.api.queries.CharactersQuery;
 import pl.wsei.marvel.BuildConfig;
 import pl.wsei.marvel.adapters.CharacterAdapter;
 import pl.wsei.marvel.databinding.FragmentCharactersBinding;
 
 public class CharactersFragment extends Fragment {
 
-    private FragmentCharactersBinding binding;
-    private List<CharacterRow> characters = new ArrayList<>();
+    private final List<CharacterRow> characters = new ArrayList<>();
     private CharacterAdapter adapter;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentCharactersBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             final ViewGroup container,
+                             final Bundle savedInstanceState) {
+        pl.wsei.marvel.databinding.FragmentCharactersBinding binding = FragmentCharactersBinding.inflate(inflater, container, false);
+        final View root = binding.getRoot();
 
-        adapter = new CharacterAdapter(characters);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        this.adapter = new CharacterAdapter(this.characters);
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         binding.charactersRecyclerView.setLayoutManager(layoutManager);
-        binding.charactersRecyclerView.setAdapter(adapter);
+        binding.charactersRecyclerView.setAdapter(this.adapter);
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        Callable<BaseResponse<CharactersDto>> callable = () -> {
-            MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY).build();
+        final Callable<BaseResponse<CharactersDto>> callable = () -> {
+            final MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY).build();
 
-            CharacterClient characterClient = new CharacterClient(marvelApiConfig);
+            final CharacterClient characterClient = new CharacterClient(marvelApiConfig);
 
-            CharactersQuery query = CharactersQuery.Builder.create().withLimit(100).build();
+            final CharactersQuery query = CharactersQuery.Builder.create().withLimit(100).build();
 
             return characterClient.getAll(query);
         };
 
-        Future<BaseResponse<CharactersDto>> future = executorService.submit(callable);
+        final Future<BaseResponse<CharactersDto>> future = executorService.submit(callable);
 
         try {
-            BaseResponse<CharactersDto> all = future.get();
+            final BaseResponse<CharactersDto> all = future.get();
 
-            getActivity().runOnUiThread(() -> {
-                List<CharacterDto> characterDtos = all.getResponse().getCharacters();
-                for (CharacterDto characterDto : characterDtos) {
-                    CharacterRow character = new CharacterRow(characterDto.getId(), characterDto.getName(), characterDto.getDescription(), characterDto.getThumbnail().getPath() + "." + characterDto.getThumbnail().getExtension());
-                    characters.add(character);
+            this.getActivity().runOnUiThread(() -> {
+                final List<CharacterDto> characterDtos = all.getResponse().getCharacters();
+                for (final CharacterDto characterDto : characterDtos) {
+                    final CharacterRow character = new CharacterRow(characterDto.getId(), characterDto.getName(), characterDto.getDescription(), characterDto.getThumbnail().getPath() + "." + characterDto.getThumbnail().getExtension());
+                    this.characters.add(character);
                 }
-                adapter.notifyDataSetChanged();
+                this.adapter.notifyDataSetChanged();
             });
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (final ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 

@@ -1,4 +1,4 @@
-package core.models.DTOs;
+package core.api.models.DTOs;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -29,46 +29,46 @@ public class CharacterDto {
     private ResourcesDto<SeriesResourceDto> series;
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public String getModified() {
-        return modified;
+        return this.modified;
     }
 
     public String getResourceUri() {
-        return resourceUri;
+        return this.resourceUri;
     }
 
     public List<UrlDto> getUrls() {
-        return urls;
+        return this.urls;
     }
 
     public ImageDto getThumbnail() {
-        return thumbnail;
+        return this.thumbnail;
     }
 
     public ResourcesDto<ComicResourceDto> getComics() {
-        return comics;
+        return this.comics;
     }
 
     public ResourcesDto<StoryResourceDto> getStories() {
-        return stories;
+        return this.stories;
     }
 
     public ResourcesDto<EventResourceDto> getEvents() {
-        return events;
+        return this.events;
     }
 
     public ResourcesDto<SeriesResourceDto> getSeries() {
-        return series;
+        return this.series;
     }
 }

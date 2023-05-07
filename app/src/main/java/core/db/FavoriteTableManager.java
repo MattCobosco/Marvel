@@ -23,7 +23,6 @@ public class FavoriteTableManager {
         values.put("type", favorite.type);
         values.put("id", favorite.id);
         db.insert("favorite", null, values);
-        db.close();
     }
 
     public void removeFavorite(final Favorite favorite) {
@@ -40,7 +39,6 @@ public class FavoriteTableManager {
             favorites.add(cursor.getString(0));
         }
         cursor.close();
-        db.close();
         return favorites;
     }
 
@@ -52,7 +50,6 @@ public class FavoriteTableManager {
             favorites.add(new Favorite(cursor.getString(0), cursor.getString(1)));
         }
         cursor.close();
-        db.close();
         return favorites;
     }
 
@@ -61,7 +58,10 @@ public class FavoriteTableManager {
         final Cursor cursor = db.query("favorite", new String[]{"id"}, "type = ? AND id = ?", new String[]{favorite.type, favorite.id}, null, null, null);
         final Boolean isFavorite = 0 < cursor.getCount();
         cursor.close();
-        db.close();
         return isFavorite;
+    }
+
+    public void closeDbConnection() {
+        this.databaseHelper.close();
     }
 }

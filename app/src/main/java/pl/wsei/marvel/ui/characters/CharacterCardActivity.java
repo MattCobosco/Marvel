@@ -103,4 +103,10 @@ public class CharacterCardActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.favoriteTableManager.closeDbConnection();
+    }
 }

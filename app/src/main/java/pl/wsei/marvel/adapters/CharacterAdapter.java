@@ -20,7 +20,7 @@ import pl.wsei.marvel.ui.characters.CharacterCardActivity;
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.ViewHolder> {
 
-    private final List<CharacterRow> characters;
+    private List<CharacterRow> characters;
 
     public CharacterAdapter(final List<CharacterRow> characters) {
         this.characters = characters;
@@ -29,7 +29,7 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
-        final View view = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_character_row, parent, false);
         return new ViewHolder(view);
     }
@@ -55,7 +55,12 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.View
 
     @Override
     public int getItemCount() {
-        return this.characters.size();
+        return characters.size();
+    }
+
+    public void updateData(List<CharacterRow> newData) {
+        this.characters = newData;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,11 +68,11 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.View
         public TextView nameTextView;
         public TextView descriptionTextView;
 
-        public ViewHolder(@NonNull final View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.thumbnailImageView = itemView.findViewById(R.id.character_image);
-            this.nameTextView = itemView.findViewById(R.id.character_name);
-            this.descriptionTextView = itemView.findViewById(R.id.character_description);
+            thumbnailImageView = itemView.findViewById(R.id.character_image);
+            nameTextView = itemView.findViewById(R.id.character_name);
+            descriptionTextView = itemView.findViewById(R.id.character_description);
         }
     }
 }

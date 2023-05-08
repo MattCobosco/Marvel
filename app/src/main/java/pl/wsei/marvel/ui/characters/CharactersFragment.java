@@ -1,6 +1,7 @@
 package pl.wsei.marvel.ui.characters;
 
 import android.os.Bundle;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,52 +28,66 @@ import core.api.models.DTOs.CharactersDto;
 import core.api.queries.CharactersQuery;
 import pl.wsei.marvel.BuildConfig;
 import pl.wsei.marvel.adapters.CharacterAdapter;
+import pl.wsei.marvel.cache.CharacterCacheSingleton;
 import pl.wsei.marvel.databinding.FragmentCharactersBinding;
 
 public class CharactersFragment extends Fragment {
 
-    private final List<CharacterRow> characters = new ArrayList<>();
+    private List<CharacterRow> characters = new ArrayList<>();
     private CharacterAdapter adapter;
+    private LruCache<String, List<CharacterRow>> cache;
 
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater,
-                             final ViewGroup container,
-                             final Bundle savedInstanceState) {
-        pl.wsei.marvel.databinding.FragmentCharactersBinding binding = FragmentCharactersBinding.inflate(inflater, container, false);
-        final View root = binding.getRoot();
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+        FragmentCharactersBinding binding = FragmentCharactersBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
-        this.adapter = new CharacterAdapter(this.characters);
-        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
+        cache = CharacterCacheSingleton.getInstance().getCache();
+
+        adapter = new CharacterAdapter(characters);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         binding.charactersRecyclerView.setLayoutManager(layoutManager);
-        binding.charactersRecyclerView.setAdapter(this.adapter);
+        binding.charactersRecyclerView.setAdapter(adapter);
 
-        final ExecutorService executorService = Executors.newSingleThreadExecutor();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        final Callable<BaseResponse<CharactersDto>> callable = () -> {
-            final MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY).build();
+        Callable<BaseResponse<CharactersDto>> callable;
+        Future<BaseResponse<CharactersDto>> future;
 
-            final CharacterClient characterClient = new CharacterClient(marvelApiConfig);
+        List<CharacterRow> cachedData = cache.get("characters");
+        if (cachedData != null) {
+            characters = cachedData;
+            adapter.updateData(characters);
+        } else {
+            callable = () -> {
+                MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY).build();
 
-            final CharactersQuery query = CharactersQuery.Builder.create().withLimit(100).build();
+                CharacterClient characterClient = new CharacterClient(marvelApiConfig);
 
-            return characterClient.getAll(query);
-        };
+                CharactersQuery query = CharactersQuery.Builder.create().withLimit(100).build();
 
-        final Future<BaseResponse<CharactersDto>> future = executorService.submit(callable);
+                return characterClient.getAll(query);
+            };
 
-        try {
-            final BaseResponse<CharactersDto> all = future.get();
+            future = executorService.submit(callable);
 
-            this.getActivity().runOnUiThread(() -> {
-                final List<CharacterDto> characterDtos = all.getResponse().getCharacters();
-                for (final CharacterDto characterDto : characterDtos) {
-                    final CharacterRow character = new CharacterRow(characterDto.getId(), characterDto.getName(), characterDto.getDescription(), characterDto.getThumbnail().getPath() + "." + characterDto.getThumbnail().getExtension());
-                    this.characters.add(character);
-                }
-                this.adapter.notifyDataSetChanged();
-            });
-        } catch (final ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
+            try {
+                BaseResponse<CharactersDto> all = future.get();
+
+                getActivity().runOnUiThread(() -> {
+                    List<CharacterDto> characterDtos = all.getResponse().getCharacters();
+                    for (CharacterDto characterDto : characterDtos) {
+                        CharacterRow character = new CharacterRow(characterDto.getId(), characterDto.getName(), characterDto.getDescription(), characterDto.getThumbnail().getPath() + "." + characterDto.getThumbnail().getExtension());
+                        characters.add(character);
+                    }
+                    cache.put("characters", characters);
+                    adapter.updateData(characters);
+                });
+            } catch (ExecutionException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return root;

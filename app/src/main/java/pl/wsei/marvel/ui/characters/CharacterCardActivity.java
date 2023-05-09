@@ -34,71 +34,71 @@ import pl.wsei.marvel.adapters.CharacterSeriesAdapter;
 
 public class CharacterCardActivity extends AppCompatActivity {
     private CharacterDto character;
-    private final FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
-    private final int favoriteIcon = R.drawable.star_24;
-    private final int notFavoriteIcon = R.drawable.star_outline_24;
+    private FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
+    private int favoriteIcon = R.drawable.star_24;
+    private int notFavoriteIcon = R.drawable.star_outline_24;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_character_card);
+        setContentView(R.layout.activity_character_card);
 
-        final String characterId = this.getIntent().getStringExtra("character_id");
+        String characterId = getIntent().getStringExtra("character_id");
 
-        final ExecutorService executorService = Executors.newSingleThreadExecutor();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        final Callable<BaseResponse<CharacterDto>> callable = () -> {
-            final MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY).build();
+        Callable<BaseResponse<CharacterDto>> callable = () -> {
+            MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY).build();
 
-            final CharacterClient characterClient = new CharacterClient(marvelApiConfig);
+            CharacterClient characterClient = new CharacterClient(marvelApiConfig);
 
             return characterClient.getCharacter(characterId);
         };
 
-        final Future<BaseResponse<CharacterDto>> future = executorService.submit(callable);
+        Future<BaseResponse<CharacterDto>> future = executorService.submit(callable);
 
         try {
-            final BaseResponse<CharacterDto> response = future.get();
-            this.character = response.getResponse();
-            final Boolean isFavorite = this.favoriteTableManager.isFavorite(new Favorite("character", this.character.getId()));
+            BaseResponse<CharacterDto> response = future.get();
+            character = response.getResponse();
+            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite("character", character.getId()));
 
-            final TextView nameTextView = this.findViewById(R.id.character_name);
-            nameTextView.setText(this.character.getName());
+            TextView nameTextView = findViewById(R.id.character_name);
+            nameTextView.setText(character.getName());
 
-            final ImageView characterFavorite = this.findViewById(R.id.character_favorite);
-            characterFavorite.setImageDrawable(isFavorite ? this.getDrawable(this.favoriteIcon) : this.getDrawable(this.notFavoriteIcon));
+            ImageView characterFavorite = findViewById(R.id.character_favorite);
+            characterFavorite.setImageDrawable(isFavorite ? getDrawable(favoriteIcon) : getDrawable(notFavoriteIcon));
 
-            final TextView descriptionTextView = this.findViewById(R.id.character_description);
+            TextView descriptionTextView = findViewById(R.id.character_description);
 
-            descriptionTextView.setText(this.character.getDescription());
-            if (this.character.getDescription().isEmpty()) {
-                final NestedScrollView characterDescriptionNestedScroll = this.findViewById(R.id.character_description_scroll);
+            descriptionTextView.setText(character.getDescription());
+            if (character.getDescription().isEmpty()) {
+                NestedScrollView characterDescriptionNestedScroll = findViewById(R.id.character_description_scroll);
                 characterDescriptionNestedScroll.getLayoutParams().height = 0;
             }
 
-            final ImageView imageView = this.findViewById(R.id.character_image);
-            Glide.with(this).load(this.character.getThumbnail().getImageUrl(ImageDto.Size.FULLSIZE)).into(imageView);
+            ImageView imageView = findViewById(R.id.character_image);
+            Glide.with(this).load(character.getThumbnail().getImageUrl(ImageDto.Size.FULLSIZE)).into(imageView);
 
-            final List<String> seriesList = this.character.getSeries().getItems().stream().map(ResourceDto::getName).collect(Collectors.toList());
-            final ListView seriesListView = this.findViewById(R.id.character_series_list);
-            final CharacterSeriesAdapter seriesAdapter = new CharacterSeriesAdapter(this, seriesList);
+            List<String> seriesList = character.getSeries().getItems().stream().map(ResourceDto::getName).collect(Collectors.toList());
+            ListView seriesListView = findViewById(R.id.character_series_list);
+            CharacterSeriesAdapter seriesAdapter = new CharacterSeriesAdapter(this, seriesList);
             seriesListView.setAdapter(seriesAdapter);
 
-        } catch (final ExecutionException | InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        final ImageView characterFavorite = this.findViewById(R.id.character_favorite);
+        ImageView characterFavorite = findViewById(R.id.character_favorite);
 
         characterFavorite.setOnClickListener(v -> {
-            final Favorite favorite = new Favorite("character", this.character.getId());
-            if (characterFavorite.getDrawable().getConstantState() == this.getDrawable(this.notFavoriteIcon).getConstantState()) {
-                characterFavorite.setImageResource(this.favoriteIcon);
-                this.favoriteTableManager.addFavorite(favorite);
+            Favorite favorite = new Favorite("character", character.getId());
+            if (characterFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
+                characterFavorite.setImageResource(favoriteIcon);
+                favoriteTableManager.addFavorite(favorite);
                 Toast.makeText(this, String.format("Added %s to favorites", character.getName()), Toast.LENGTH_SHORT).show();
             } else {
-                characterFavorite.setImageResource(this.notFavoriteIcon);
-                this.favoriteTableManager.removeFavorite(favorite);
+                characterFavorite.setImageResource(notFavoriteIcon);
+                favoriteTableManager.removeFavorite(favorite);
                 Toast.makeText(this, String.format("Removed %s from favorites", character.getName()), Toast.LENGTH_SHORT).show();
             }
         });
@@ -107,6 +107,6 @@ public class CharacterCardActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.favoriteTableManager.closeDbConnection();
+        favoriteTableManager.closeDbConnection();
     }
 }

@@ -3,11 +3,13 @@ package pl.wsei.marvel;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -28,9 +30,9 @@ public class NavigationActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         AppCompatActivity context = this;
 
-        for(int i = 0; i < menu.size(); i++){
+        for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
-            if(drawable != null) {
+            if (drawable != null) {
                 drawable.mutate();
                 drawable.setColorFilter(ContextCompat.getColor(context, R.color.red), PorterDuff.Mode.SRC_ATOP);
             }
@@ -42,12 +44,24 @@ public class NavigationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        /*TODO: toolbar icon click handling*/
         if (id == R.id.action_info) {
-            Toast.makeText(this, "Info", Toast.LENGTH_SHORT).show();
+            PopupWindow popupWindow = new PopupWindow(this);
+
+            popupWindow.setWidth(700);
+            popupWindow.setHeight(1150);
+            popupWindow.setBackgroundDrawable(getDrawable(R.drawable.popup_background));
+            View popupView = LayoutInflater.from(this).inflate(R.layout.info_popup, null);
+
+            popupWindow.setContentView(popupView);
+
+            popupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+            popupWindow.setFocusable(true);
+
+            popupWindow.showAtLocation(findViewById(R.id.container), Gravity.CENTER, 0, 0);
+
             return true;
         } else if (id == R.id.action_settings) {
-            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
             return true;
         }
 

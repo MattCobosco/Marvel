@@ -3,4 +3,8 @@
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="colorControlNormal">@color/red</item>
     </style>
+    <style name="PopupAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_down_to_bottom</item>
+    </style>
 </resources>

@@ -26,6 +26,7 @@ import core.api.models.DTOs.BaseResponse;
 import core.api.models.DTOs.CharacterDto;
 import core.api.models.DTOs.ImageDto;
 import core.api.models.DTOs.ResourceDto;
+import core.api.utils.ApiKeysManager;
 import core.db.FavoriteTableManager;
 import core.db.models.Favorite;
 import pl.wsei.marvel.BuildConfig;
@@ -33,6 +34,7 @@ import pl.wsei.marvel.R;
 import pl.wsei.marvel.adapters.CharacterSeriesAdapter;
 
 public class CharacterCardActivity extends AppCompatActivity {
+    private ApiKeysManager apiKeysManager;
     private CharacterDto character;
     private FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
     private int favoriteIcon = R.drawable.star_24;
@@ -42,13 +44,16 @@ public class CharacterCardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_card);
+        apiKeysManager = new ApiKeysManager(this);
 
         String characterId = getIntent().getStringExtra("character_id");
+        String publicKey = apiKeysManager.getPublicKey();
+        String privateKey = apiKeysManager.getPrivateKey();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         Callable<BaseResponse<CharacterDto>> callable = () -> {
-            MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY).build();
+            MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();
 
             CharacterClient characterClient = new CharacterClient(marvelApiConfig);
 

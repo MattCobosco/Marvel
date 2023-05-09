@@ -1,10 +1,12 @@
 package pl.wsei.marvel.ui.characters;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,13 +28,15 @@ import core.api.models.DTOs.BaseResponse;
 import core.api.models.DTOs.CharacterDto;
 import core.api.models.DTOs.CharactersDto;
 import core.api.queries.CharactersQuery;
+import core.api.utils.ApiKeysManager;
 import pl.wsei.marvel.BuildConfig;
 import pl.wsei.marvel.adapters.CharacterAdapter;
 import pl.wsei.marvel.cache.CharacterCacheSingleton;
 import pl.wsei.marvel.databinding.FragmentCharactersBinding;
+import retrofit2.HttpException;
 
 public class CharactersFragment extends Fragment {
-
+    private ApiKeysManager apiKeysManager;
     private List<CharacterRow> characters = new ArrayList<>();
     private CharacterAdapter adapter;
     private LruCache<String, List<CharacterRow>> cache;
@@ -45,6 +49,10 @@ public class CharactersFragment extends Fragment {
         View root = binding.getRoot();
 
         cache = CharacterCacheSingleton.getInstance().getCache();
+
+        apiKeysManager = new ApiKeysManager(this.getActivity());
+        String publicKey = apiKeysManager.getPublicKey();
+        String privateKey = apiKeysManager.getPrivateKey();
 
         adapter = new CharacterAdapter(characters);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
@@ -62,7 +70,7 @@ public class CharactersFragment extends Fragment {
             adapter.updateData(characters);
         } else {
             callable = () -> {
-                MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY).build();
+                MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();
 
                 CharacterClient characterClient = new CharacterClient(marvelApiConfig);
 
@@ -85,8 +93,15 @@ public class CharactersFragment extends Fragment {
                     cache.put("characters", characters);
                     adapter.updateData(characters);
                 });
+            } catch (HttpException e) {
+                if (e.code() == 401) {
+                    Toast.makeText(getActivity(), "Unauthorized. Check if your API Key is correct", Toast.LENGTH_SHORT).show();
+                    adapter.updateData(new ArrayList<>());
+                } else {
+                    throw new RuntimeException(e);
+                }
             } catch (ExecutionException | InterruptedException e) {
-                throw new RuntimeException(e);
+                Log.e("CharactersFragment", "Error while fetching data from API", e);
             }
         }
 

@@ -29,7 +29,6 @@ import core.api.models.DTOs.CharacterDto;
 import core.api.models.DTOs.CharactersDto;
 import core.api.queries.CharactersQuery;
 import core.api.utils.ApiKeysManager;
-import pl.wsei.marvel.BuildConfig;
 import pl.wsei.marvel.adapters.CharacterAdapter;
 import pl.wsei.marvel.cache.CharacterCacheSingleton;
 import pl.wsei.marvel.databinding.FragmentCharactersBinding;

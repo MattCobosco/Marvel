@@ -25,10 +25,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import core.api.utils.ApiKeysManager;
+import core.db.FavoriteTableManager;
 import pl.wsei.marvel.databinding.ActivityNavigationBinding;
 
 public class NavigationActivity extends AppCompatActivity {
     private ApiKeysManager apiKeysManager;
+    private FavoriteTableManager favoriteTableManager;
     private ActivityNavigationBinding binding;
 
     @Override
@@ -79,6 +81,11 @@ public class NavigationActivity extends AppCompatActivity {
             String privateKey = apiKeysManager.getPrivateKey();
             EditText publicKeyEditText = dialogLayout.findViewById(R.id.public_key_edit_text);
             EditText privateKeyEditText = dialogLayout.findViewById(R.id.private_key_edit_text);
+
+            Button clearFavoritesButton = dialogLayout.findViewById(R.id.clear_favorites_button);
+            clearFavoritesButton.setOnClickListener(v -> {
+                favoriteTableManager.removeAllFavorites();
+            });
 
             if (publicKey != null && !publicKey.isEmpty()) {
                 publicKeyEditText.setText(publicKey);
@@ -134,6 +141,7 @@ public class NavigationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         apiKeysManager = new ApiKeysManager(getApplicationContext());
+        favoriteTableManager = new FavoriteTableManager(getApplicationContext());
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_characters, R.id.navigation_comics, R.id.navigation_creators)

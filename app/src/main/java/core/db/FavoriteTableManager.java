@@ -31,6 +31,12 @@ public class FavoriteTableManager {
         db.close();
     }
 
+    public void removeAllFavorites() {
+        final SQLiteDatabase db = this.databaseHelper.getWritableDatabase();
+        db.delete("favorite", null, null);
+        db.close();
+    }
+
     public List<String> getFavoriteIdsByType(final String type) {
         final SQLiteDatabase db = this.databaseHelper.getReadableDatabase();
         final Cursor cursor = db.query("favorite", new String[]{"id"}, "type = ?", new String[]{type}, null, null, null);

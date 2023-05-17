@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -85,6 +86,7 @@ public class NavigationActivity extends AppCompatActivity {
             Button clearFavoritesButton = dialogLayout.findViewById(R.id.clear_favorites_button);
             clearFavoritesButton.setOnClickListener(v -> {
                 favoriteTableManager.removeAllFavorites();
+                Toast.makeText(this, "Favorites cleared", Toast.LENGTH_SHORT).show();
             });
 
             if (publicKey != null && !publicKey.isEmpty()) {

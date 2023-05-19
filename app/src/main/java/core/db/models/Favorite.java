@@ -1,11 +1,10 @@
 package core.db.models;
 
-public class Favorite {
-    public String type;
-    public String id;
+import core.enums.Type;
 
-    public Favorite(final String type, final String id) {
-        this.type = type;
-        this.id = id;
+public class Favorite extends BaseTypeId {
+    public Favorite(Type type, String id) {
+        super(type, id);
     }
 }
+

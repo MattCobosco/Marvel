@@ -59,4 +59,5 @@
     <string name="public_key">Public Key</string>
     <string name="clear_favorites">Clear favorites</string>
     <string name="clear_browsing_history">Clear browsing history</string>
+    <string name="history">History</string>
 </resources>

@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_history"
+        android:title="@string/history"
+        android:icon="@drawable/history_icon"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_settings"
         android:title="@string/settings"
         android:icon="@drawable/settings_icon"

@@ -13,7 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -25,14 +28,21 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import core.api.utils.ApiKeysManager;
 import core.db.FavoriteTableManager;
+import core.db.HistoryTableManager;
+import core.db.models.HistoryEntry;
 import pl.wsei.marvel.databinding.ActivityNavigationBinding;
 
 public class NavigationActivity extends AppCompatActivity {
     private ApiKeysManager apiKeysManager;
     private FavoriteTableManager favoriteTableManager;
+    private HistoryTableManager historyTableManager;
     private ActivityNavigationBinding binding;
+    private TypeToIconDictionary typeToIconDictionary;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,6 +77,41 @@ public class NavigationActivity extends AppCompatActivity {
 
             popupWindow.setFocusable(true);
 
+            popupWindow.showAtLocation(findViewById(R.id.container), Gravity.CENTER, 0, 0);
+
+            return true;
+        } else if (id == R.id.action_history) {
+            PopupWindow popupWindow = new PopupWindow(this);
+            List<HistoryEntry> history = historyTableManager.getAllHistoryEntries();
+            typeToIconDictionary = new TypeToIconDictionary();
+
+            popupWindow.setWidth(800);
+            popupWindow.setHeight(1150);
+            popupWindow.setBackgroundDrawable(getDrawable(R.drawable.popup_background));
+            View popupView = LayoutInflater.from(this).inflate(R.layout.history_popup, null);
+
+            LinearLayout historyItemsLayout = popupView.findViewById(R.id.history_item_linear_layout);
+
+            for (HistoryEntry entry : history) {
+                View historyItem = LayoutInflater.from(this).inflate(R.layout.history_popup_item, null);
+
+                ImageView typeImageView = historyItem.findViewById(R.id.history_item_type_image_view);
+                TextView nameTextView = historyItem.findViewById(R.id.history_item_name_text_view);
+                TextView timestampTextView = historyItem.findViewById(R.id.history_item_timestamp_text_view);
+
+                typeImageView.setImageResource(typeToIconDictionary.getIcon(entry.getType()));
+                nameTextView.setText(entry.getId());
+                timestampTextView.setText(
+                        new SimpleDateFormat("dd/MM/yy HH:mm")
+                                .format(new java.util.Date(entry.getTimestamp()))
+                );
+
+                historyItemsLayout.addView(historyItem);
+            }
+
+            popupWindow.setContentView(popupView);
+            popupWindow.setAnimationStyle(R.style.PopupAnimation);
+            popupWindow.setFocusable(true);
             popupWindow.showAtLocation(findViewById(R.id.container), Gravity.CENTER, 0, 0);
 
             return true;
@@ -144,6 +189,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         apiKeysManager = new ApiKeysManager(getApplicationContext());
         favoriteTableManager = new FavoriteTableManager(getApplicationContext());
+        historyTableManager = new HistoryTableManager(getApplicationContext());
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_characters, R.id.navigation_comics, R.id.navigation_creators)
@@ -152,5 +198,4 @@ public class NavigationActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
-
 }

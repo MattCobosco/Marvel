@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.db.models.Favorite;
+import core.enums.Type;
 
 public class FavoriteTableManager {
     private final DatabaseHelper databaseHelper;
@@ -20,15 +21,14 @@ public class FavoriteTableManager {
     public void addFavorite(final Favorite favorite) {
         final SQLiteDatabase db = this.databaseHelper.getWritableDatabase();
         final ContentValues values = new ContentValues();
-        values.put("type", favorite.type);
+        values.put("type", favorite.type.name());
         values.put("id", favorite.id);
         db.insert("favorite", null, values);
     }
 
     public void removeFavorite(final Favorite favorite) {
         final SQLiteDatabase db = this.databaseHelper.getWritableDatabase();
-        db.delete("favorite", "type = ? AND id = ?", new String[]{favorite.type, favorite.id});
-        db.close();
+        db.delete("favorite", "type = ? AND id = ?", new String[]{favorite.type.name(), favorite.id});
     }
 
     public void removeAllFavorites() {
@@ -37,31 +37,9 @@ public class FavoriteTableManager {
         db.close();
     }
 
-    public List<String> getFavoriteIdsByType(final String type) {
-        final SQLiteDatabase db = this.databaseHelper.getReadableDatabase();
-        final Cursor cursor = db.query("favorite", new String[]{"id"}, "type = ?", new String[]{type}, null, null, null);
-        final List<String> favorites = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            favorites.add(cursor.getString(0));
-        }
-        cursor.close();
-        return favorites;
-    }
-
-    public List<Favorite> getAllFavorites() {
-        final SQLiteDatabase db = this.databaseHelper.getReadableDatabase();
-        final Cursor cursor = db.query("favorite", new String[]{"type", "id"}, null, null, null, null, null);
-        final List<Favorite> favorites = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            favorites.add(new Favorite(cursor.getString(0), cursor.getString(1)));
-        }
-        cursor.close();
-        return favorites;
-    }
-
     public Boolean isFavorite(final Favorite favorite) {
         final SQLiteDatabase db = this.databaseHelper.getReadableDatabase();
-        final Cursor cursor = db.query("favorite", new String[]{"id"}, "type = ? AND id = ?", new String[]{favorite.type, favorite.id}, null, null, null);
+        final Cursor cursor = db.query("favorite", new String[]{"id"}, "type = ? AND id = ?", new String[]{favorite.type.name(), favorite.id}, null, null, null);
         final Boolean isFavorite = 0 < cursor.getCount();
         cursor.close();
         return isFavorite;

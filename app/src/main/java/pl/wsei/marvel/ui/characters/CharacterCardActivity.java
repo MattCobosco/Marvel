@@ -28,8 +28,10 @@ import core.api.models.DTOs.ImageDto;
 import core.api.models.DTOs.ResourceDto;
 import core.api.utils.ApiKeysManager;
 import core.db.FavoriteTableManager;
+import core.db.HistoryTableManager;
 import core.db.models.Favorite;
-import pl.wsei.marvel.BuildConfig;
+import core.db.models.HistoryEntry;
+import core.enums.Type;
 import pl.wsei.marvel.R;
 import pl.wsei.marvel.adapters.CharacterSeriesAdapter;
 
@@ -37,6 +39,7 @@ public class CharacterCardActivity extends AppCompatActivity {
     private ApiKeysManager apiKeysManager;
     private CharacterDto character;
     private FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
+    private HistoryTableManager historyTableManager = new HistoryTableManager(this);
     private int favoriteIcon = R.drawable.star_24;
     private int notFavoriteIcon = R.drawable.star_outline_24;
 
@@ -52,6 +55,8 @@ public class CharacterCardActivity extends AppCompatActivity {
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
+        historyTableManager.addHistoryEntry(new HistoryEntry(Type.CHARACTER, characterId, System.currentTimeMillis()));
+
         Callable<BaseResponse<CharacterDto>> callable = () -> {
             MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();
 
@@ -65,7 +70,7 @@ public class CharacterCardActivity extends AppCompatActivity {
         try {
             BaseResponse<CharacterDto> response = future.get();
             character = response.getResponse();
-            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite("character", character.getId()));
+            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite(Type.CHARACTER, character.getId()));
 
             TextView nameTextView = findViewById(R.id.character_name);
             nameTextView.setText(character.getName());
@@ -96,7 +101,7 @@ public class CharacterCardActivity extends AppCompatActivity {
         ImageView characterFavorite = findViewById(R.id.character_favorite);
 
         characterFavorite.setOnClickListener(v -> {
-            Favorite favorite = new Favorite("character", character.getId());
+            Favorite favorite = new Favorite(Type.CHARACTER, character.getId());
             if (characterFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
                 characterFavorite.setImageResource(favoriteIcon);
                 favoriteTableManager.addFavorite(favorite);
@@ -113,5 +118,6 @@ public class CharacterCardActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         favoriteTableManager.closeDbConnection();
+        historyTableManager.closeDbConnection();
     }
 }

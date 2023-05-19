@@ -138,11 +138,8 @@ public class NavigationActivity extends AppCompatActivity {
             }
 
             builder.setPositiveButton("Save", (dialog, which) -> {
-                EditText publicKeyEditText1 = dialogLayout.findViewById(R.id.public_key_edit_text);
-                EditText privateKeyEditText1 = dialogLayout.findViewById(R.id.private_key_edit_text);
-
-                String publicKeyEdited = publicKeyEditText1.getText().toString().trim();
-                String privateKeyEdited = privateKeyEditText1.getText().toString().trim();
+                String publicKeyEdited = publicKeyEditText.getText().toString().trim();
+                String privateKeyEdited = privateKeyEditText.getText().toString().trim();
 
                 apiKeysManager.setPublicKey(publicKeyEdited);
                 apiKeysManager.setPrivateKey(privateKeyEdited);

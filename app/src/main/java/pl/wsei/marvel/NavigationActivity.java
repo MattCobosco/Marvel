@@ -88,7 +88,7 @@ public class NavigationActivity extends AppCompatActivity {
             List<HistoryEntry> history = historyTableManager.getAllHistoryEntries(false);
             typeToIconDictionary = new TypeToIconDictionary();
 
-            popupWindow.setWidth(800);
+            popupWindow.setWidth(950);
             popupWindow.setHeight(1150);
             popupWindow.setBackgroundDrawable(getDrawable(R.drawable.popup_background));
             View popupView = LayoutInflater.from(this).inflate(R.layout.history_popup, null);

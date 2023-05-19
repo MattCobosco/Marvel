@@ -46,9 +46,11 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.View
 
         holder.itemView.setOnClickListener(v -> {
             final String characterId = characterRow.getId();
+            final String characterName = characterRow.getName();
 
             final Intent intent = new Intent(v.getContext(), CharacterCardActivity.class);
             intent.putExtra("character_id", characterId);
+            intent.putExtra("character_name", characterName);
             v.getContext().startActivity(intent);
         });
     }

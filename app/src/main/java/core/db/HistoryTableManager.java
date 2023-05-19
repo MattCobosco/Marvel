@@ -23,6 +23,7 @@ public class HistoryTableManager {
         final ContentValues values = new ContentValues();
         values.put("type", entry.type.name());
         values.put("id", entry.id);
+        values.put("name", entry.name);
         values.put("timestamp", entry.timestamp);
         db.insert("history", null, values);
 
@@ -31,7 +32,7 @@ public class HistoryTableManager {
 
     public void limitHistoryEntries() {
         final SQLiteDatabase db = this.databaseHelper.getWritableDatabase();
-        db.execSQL("DELETE FROM history WHERE id NOT IN (SELECT id FROM history ORDER BY timestamp DESC LIMIT 10)");
+        db.execSQL("DELETE FROM history WHERE id NOT IN (SELECT id FROM history ORDER BY timestamp DESC LIMIT 50)");
     }
 
     public void removeAllHistoryEntries() {
@@ -42,10 +43,10 @@ public class HistoryTableManager {
 
     public List<HistoryEntry> getAllHistoryEntries() {
         final SQLiteDatabase db = this.databaseHelper.getReadableDatabase();
-        final Cursor cursor = db.query("history", new String[]{"type", "id", "timestamp"}, null, null, null, null, null);
+        final Cursor cursor = db.query("history", new String[]{"type", "id", "name", "timestamp"}, null, null, null, null, null);
         final List<HistoryEntry> historyEntries = new ArrayList<>();
         while (cursor.moveToNext()) {
-            historyEntries.add(new HistoryEntry(Type.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getLong(2)));
+            historyEntries.add(new HistoryEntry(Type.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getLong(3)));
         }
         cursor.close();
         return historyEntries;

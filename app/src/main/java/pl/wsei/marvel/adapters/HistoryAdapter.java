@@ -35,7 +35,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         HistoryEntry item = historyList.get(position);
 
         holder.typeImageView.setImageResource(TypeToIconDictionary.getIcon(item.getType()));
-        holder.nameTextView.setText(item.getId());
+        holder.nameTextView.setText(item.getName());
         holder.timestampTextView.setText(android.text.format.DateFormat.format("dd-MM-yyyy HH:mm", item.getTimestamp()));
     }
 

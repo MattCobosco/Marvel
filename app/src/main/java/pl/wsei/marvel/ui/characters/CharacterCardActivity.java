@@ -50,12 +50,13 @@ public class CharacterCardActivity extends AppCompatActivity {
         apiKeysManager = new ApiKeysManager(this);
 
         String characterId = getIntent().getStringExtra("character_id");
+        String characterName = getIntent().getStringExtra("character_name");
         String publicKey = apiKeysManager.getPublicKey();
         String privateKey = apiKeysManager.getPrivateKey();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        historyTableManager.addHistoryEntry(new HistoryEntry(Type.CHARACTER, characterId, System.currentTimeMillis()));
+        historyTableManager.addHistoryEntry(new HistoryEntry(Type.CHARACTER, characterId, characterName, System.currentTimeMillis()));
 
         Callable<BaseResponse<CharacterDto>> callable = () -> {
             MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();

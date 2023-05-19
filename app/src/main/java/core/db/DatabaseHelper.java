@@ -28,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                     BaseColumns._ID + " INTEGER PRIMARY KEY," +
                     HistoryTableContract.HistoryTableEntry.COLUMN_NAME_TYPE + " TEXT," +
                     HistoryTableContract.HistoryTableEntry.COLUMN_NAME_ID + " TEXT," +
+                    HistoryTableContract.HistoryTableEntry.COLUMN_NAME_NAME + " TEXT," +
                     HistoryTableContract.HistoryTableEntry.COLUMN_NAME_TIMESTAMP + " LONG)";
 
     private static final String SQL_DELETE_HISTORY_TABLE =

@@ -27,6 +27,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -35,6 +37,7 @@ import core.api.utils.ApiKeysManager;
 import core.db.FavoriteTableManager;
 import core.db.HistoryTableManager;
 import core.db.models.HistoryEntry;
+import pl.wsei.marvel.adapters.HistoryAdapter;
 import pl.wsei.marvel.databinding.ActivityNavigationBinding;
 
 public class NavigationActivity extends AppCompatActivity {
@@ -90,24 +93,10 @@ public class NavigationActivity extends AppCompatActivity {
             popupWindow.setBackgroundDrawable(getDrawable(R.drawable.popup_background));
             View popupView = LayoutInflater.from(this).inflate(R.layout.history_popup, null);
 
-            LinearLayout historyItemsLayout = popupView.findViewById(R.id.history_item_linear_layout);
-
-            for (HistoryEntry entry : history) {
-                View historyItem = LayoutInflater.from(this).inflate(R.layout.history_popup_item, null);
-
-                ImageView typeImageView = historyItem.findViewById(R.id.history_item_type_image_view);
-                TextView nameTextView = historyItem.findViewById(R.id.history_item_name_text_view);
-                TextView timestampTextView = historyItem.findViewById(R.id.history_item_timestamp_text_view);
-
-                typeImageView.setImageResource(typeToIconDictionary.getIcon(entry.getType()));
-                nameTextView.setText(entry.getId());
-                timestampTextView.setText(
-                        new SimpleDateFormat("dd/MM/yy HH:mm")
-                                .format(new java.util.Date(entry.getTimestamp()))
-                );
-
-                historyItemsLayout.addView(historyItem);
-            }
+            RecyclerView recyclerView = popupView.findViewById(R.id.history_recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            HistoryAdapter historyAdapter = new HistoryAdapter(history);
+            recyclerView.setAdapter(historyAdapter);
 
             popupWindow.setContentView(popupView);
             popupWindow.setAnimationStyle(R.style.PopupAnimation);
@@ -132,6 +121,12 @@ public class NavigationActivity extends AppCompatActivity {
             clearFavoritesButton.setOnClickListener(v -> {
                 favoriteTableManager.removeAllFavorites();
                 Toast.makeText(this, "Favorites cleared", Toast.LENGTH_SHORT).show();
+            });
+
+            Button clearHistoryButton = dialogLayout.findViewById(R.id.clear_browsing_history_button);
+            clearHistoryButton.setOnClickListener(v -> {
+                historyTableManager.removeAllHistoryEntries();
+                Toast.makeText(this, "History cleared", Toast.LENGTH_SHORT).show();
             });
 
             if (publicKey != null && !publicKey.isEmpty()) {

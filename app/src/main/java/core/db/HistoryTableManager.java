@@ -41,9 +41,9 @@ public class HistoryTableManager {
         db.close();
     }
 
-    public List<HistoryEntry> getAllHistoryEntries() {
+    public List<HistoryEntry> getAllHistoryEntries(boolean ascending) {
         final SQLiteDatabase db = this.databaseHelper.getReadableDatabase();
-        final Cursor cursor = db.query("history", new String[]{"type", "id", "name", "timestamp"}, null, null, null, null, null);
+        final Cursor cursor = db.query("history", new String[]{"type", "id", "name", "timestamp"}, null, null, null, null, "timestamp " + (ascending ? "ASC" : "DESC"));
         final List<HistoryEntry> historyEntries = new ArrayList<>();
         while (cursor.moveToNext()) {
             historyEntries.add(new HistoryEntry(Type.valueOf(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getLong(3)));

@@ -85,7 +85,7 @@ public class NavigationActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_history) {
             PopupWindow popupWindow = new PopupWindow(this);
-            List<HistoryEntry> history = historyTableManager.getAllHistoryEntries();
+            List<HistoryEntry> history = historyTableManager.getAllHistoryEntries(false);
             typeToIconDictionary = new TypeToIconDictionary();
 
             popupWindow.setWidth(800);

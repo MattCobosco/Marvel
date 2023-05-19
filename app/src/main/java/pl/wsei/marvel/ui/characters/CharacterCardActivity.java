@@ -32,11 +32,13 @@ import core.db.HistoryTableManager;
 import core.db.models.Favorite;
 import core.db.models.HistoryEntry;
 import core.enums.Type;
+import core.utils.ConfigManager;
 import pl.wsei.marvel.R;
 import pl.wsei.marvel.adapters.CharacterSeriesAdapter;
 
 public class CharacterCardActivity extends AppCompatActivity {
     private ApiKeysManager apiKeysManager;
+    private ConfigManager configManager;
     private CharacterDto character;
     private FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
     private HistoryTableManager historyTableManager = new HistoryTableManager(this);
@@ -48,6 +50,8 @@ public class CharacterCardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_card);
         apiKeysManager = new ApiKeysManager(this);
+        configManager = new ConfigManager(this);
+        boolean isHistoryEnabled = configManager.isHistoryEnabled();
 
         String characterId = getIntent().getStringExtra("character_id");
         String characterName = getIntent().getStringExtra("character_name");
@@ -56,7 +60,8 @@ public class CharacterCardActivity extends AppCompatActivity {
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        historyTableManager.addHistoryEntry(new HistoryEntry(Type.CHARACTER, characterId, characterName, System.currentTimeMillis()));
+        if (isHistoryEnabled)
+            historyTableManager.addHistoryEntry(new HistoryEntry(Type.CHARACTER, characterId, characterName, System.currentTimeMillis()));
 
         Callable<BaseResponse<CharacterDto>> callable = () -> {
             MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();

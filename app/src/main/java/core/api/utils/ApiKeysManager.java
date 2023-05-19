@@ -3,6 +3,7 @@ package core.api.utils;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,8 +22,23 @@ public class ApiKeysManager {
 
     public ApiKeysManager(Context context) {
         this.context = context.getApplicationContext();
+        checkFile();
         loadApiKeys();
     }
+
+    private void checkFile() {
+        File file = new File(APIKEY_FILENAME);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                apikeyProperties.setProperty(PUBLIC_KEY_PROP, DEFAULT_PUBLIC_KEY);
+                apikeyProperties.setProperty(PRIVATE_KEY_PROP, DEFAULT_PRIVATE_KEY);
+            } catch (IOException e) {
+                Log.e(TAG, "Error creating API keys file", e);
+            }
+        }
+    }
+
 
     public String getPublicKey() {
         return apikeyProperties.getProperty(PUBLIC_KEY_PROP, DEFAULT_PUBLIC_KEY);

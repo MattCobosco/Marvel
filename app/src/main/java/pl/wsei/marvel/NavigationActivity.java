@@ -12,10 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,18 +32,19 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import core.api.utils.ApiKeysManager;
 import core.db.FavoriteTableManager;
 import core.db.HistoryTableManager;
 import core.db.models.HistoryEntry;
+import core.utils.ConfigManager;
 import pl.wsei.marvel.adapters.HistoryAdapter;
 import pl.wsei.marvel.databinding.ActivityNavigationBinding;
 
 public class NavigationActivity extends AppCompatActivity {
     private ApiKeysManager apiKeysManager;
+    private ConfigManager configManager;
     private FavoriteTableManager favoriteTableManager;
     private HistoryTableManager historyTableManager;
     private ActivityNavigationBinding binding;
@@ -117,6 +120,16 @@ public class NavigationActivity extends AppCompatActivity {
             EditText publicKeyEditText = dialogLayout.findViewById(R.id.public_key_edit_text);
             EditText privateKeyEditText = dialogLayout.findViewById(R.id.private_key_edit_text);
 
+            boolean isHistoryEnabled = configManager.isHistoryEnabled();
+            Switch historySwitch = dialogLayout.findViewById(R.id.history_switch);
+            historySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                int color = isChecked ? R.color.red : R.color.gray;
+                Drawable thumbDrawable = historySwitch.getThumbDrawable();
+                thumbDrawable.setColorFilter(ContextCompat.getColor(this, color), PorterDuff.Mode.MULTIPLY);
+                configManager.setHistoryEnabled(isChecked);
+            });
+            historySwitch.setChecked(isHistoryEnabled);
+
             Button clearFavoritesButton = dialogLayout.findViewById(R.id.clear_favorites_button);
             clearFavoritesButton.setOnClickListener(v -> {
                 favoriteTableManager.removeAllFavorites();
@@ -180,6 +193,7 @@ public class NavigationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         apiKeysManager = new ApiKeysManager(getApplicationContext());
+        configManager = new ConfigManager(getApplicationContext());
         favoriteTableManager = new FavoriteTableManager(getApplicationContext());
         historyTableManager = new HistoryTableManager(getApplicationContext());
 

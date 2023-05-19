@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="12dp">
@@ -19,20 +19,19 @@
     <TextView
         android:id="@+id/history_item_name_text_view"
         android:layout_width="160dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="8dp"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:gravity="start" />
+        android:gravity="start|center_vertical" />
 
     <TextView
         android:id="@+id/history_item_timestamp_text_view"
         android:layout_width="120dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="8dp"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:gravity="start"
-        android:maxLines="2" />
+        android:gravity="start|center_vertical" />
 
 </LinearLayout>

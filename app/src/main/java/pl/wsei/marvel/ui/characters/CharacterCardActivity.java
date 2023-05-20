@@ -1,6 +1,8 @@
 package pl.wsei.marvel.ui.characters;
 
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,12 +35,16 @@ import core.db.models.Favorite;
 import core.db.models.HistoryEntry;
 import core.enums.Type;
 import core.utils.ConfigManager;
+import core.utils.FileManager;
+import core.utils.PermissionManager;
 import pl.wsei.marvel.R;
 import pl.wsei.marvel.adapters.CharacterSeriesAdapter;
 
 public class CharacterCardActivity extends AppCompatActivity {
     private ApiKeysManager apiKeysManager;
     private ConfigManager configManager;
+    private FileManager fileManager;
+    private PermissionManager permissionManager;
     private CharacterDto character;
     private FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
     private HistoryTableManager historyTableManager = new HistoryTableManager(this);
@@ -51,6 +57,8 @@ public class CharacterCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_character_card);
         apiKeysManager = new ApiKeysManager(this);
         configManager = new ConfigManager(this);
+        fileManager = new FileManager(this);
+        permissionManager = new PermissionManager(this);
         boolean isHistoryEnabled = configManager.isHistoryEnabled();
 
         String characterId = getIntent().getStringExtra("character_id");
@@ -95,6 +103,17 @@ public class CharacterCardActivity extends AppCompatActivity {
             ImageView imageView = findViewById(R.id.character_image);
             Glide.with(this).load(character.getThumbnail().getImageUrl(ImageDto.Size.FULLSIZE)).into(imageView);
 
+            imageView.setOnLongClickListener(v -> {
+                BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                if (!permissionManager.isStoragePermissionGranted()) {
+                    permissionManager.requestStoragePermission(() -> saveImage(bitmap));
+                } else {
+                    saveImage(bitmap);
+                }
+                return true;
+            });
+
             List<String> seriesList = character.getSeries().getItems().stream().map(ResourceDto::getName).collect(Collectors.toList());
             ListView seriesListView = findViewById(R.id.character_series_list);
             CharacterSeriesAdapter seriesAdapter = new CharacterSeriesAdapter(this, seriesList);
@@ -118,6 +137,17 @@ public class CharacterCardActivity extends AppCompatActivity {
                 Toast.makeText(this, String.format("Removed %s from favorites", character.getName()), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void saveImage(Bitmap bitmap) {
+        fileManager.saveImageToGallery(bitmap);
+        Toast.makeText(CharacterCardActivity.this, "Image saved to gallery", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

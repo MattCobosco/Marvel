@@ -93,9 +93,6 @@ public class CharactersQuery {
 
 
     public static class Builder {
-        public static final int MAX_SIZE = 100;
-
-        public static final String LIST_SEPARATOR = ",";
         private String name;
         private String nameStartWith;
         private Date modifiedSince;
@@ -104,7 +101,7 @@ public class CharactersQuery {
         private final List<Integer> events = new ArrayList<>();
         private final List<Integer> stories = new ArrayList<>();
         private String orderBy;
-        private boolean orderByAscendant;
+        private boolean orderByAscending;
         private int limit;
         private int offset;
 
@@ -136,18 +133,18 @@ public class CharactersQuery {
         }
 
         public Builder addComics(final List<Integer> comics) {
-            this.checkNull(comics);
+            Utils.checkNull(comics);
             this.comics.addAll(comics);
             return this;
         }
 
-        public Builder addSerie(final int serie) {
-            this.series.add(serie);
+        public Builder addSeries(final int series) {
+            this.series.add(series);
             return this;
         }
 
         public Builder addSeries(final List<Integer> series) {
-            this.checkNull(series);
+            Utils.checkNull(series);
             this.series.addAll(series);
             return this;
         }
@@ -158,7 +155,7 @@ public class CharactersQuery {
         }
 
         public Builder addEvents(final List<Integer> events) {
-            this.checkNull(events);
+            Utils.checkNull(events);
             this.events.addAll(events);
             return this;
         }
@@ -169,89 +166,45 @@ public class CharactersQuery {
         }
 
         public Builder addStory(final List<Integer> stories) {
-            this.checkNull(stories);
+            Utils.checkNull(stories);
             this.stories.addAll(stories);
             return this;
         }
 
-        public Builder withOrderBy(final String orderBy, final boolean ascendant) {
+        public Builder withOrderBy(final String orderBy, final boolean ascending) {
             this.orderBy = orderBy;
-            orderByAscendant = ascendant;
+            orderByAscending = ascending;
             return this;
         }
 
         public Builder withOrderBy(final String orderBy) {
             this.orderBy = orderBy;
-            orderByAscendant = true;
+            orderByAscending = true;
             return this;
         }
 
         public Builder withLimit(final int limit) {
-            this.checkLimit(limit);
+            Utils.checkLimit(limit);
             this.limit = limit;
             return this;
         }
 
         public Builder withOffset(final int offset) {
-            if (0 > offset) {
-                throw new IllegalArgumentException("offset must be bigger or equals than zero");
-            }
-
+            Utils.checkOffset(offset);
             this.offset = offset;
             return this;
         }
 
         public CharactersQuery build() {
-            final String plainModifedSince = this.convertDate(this.modifiedSince);
-            final String plainComics = this.convertToList(this.comics);
-            final String plainEvents = this.convertToList(this.events);
-            final String plainSeries = this.convertToList(this.series);
-            final String plainStories = this.convertToList(this.stories);
-            final String plainOrderBy = this.convertOrderBy(this.orderBy, this.orderByAscendant);
+            final String plainModifiedSince = Utils.convertDate(this.modifiedSince);
+            final String plainComics = Utils.convertToList(this.comics);
+            final String plainEvents = Utils.convertToList(this.events);
+            final String plainSeries = Utils.convertToList(this.series);
+            final String plainStories = Utils.convertToList(this.stories);
+            final String plainOrderBy = Utils.convertOrderBy(this.orderBy, this.orderByAscending);
 
-            return new CharactersQuery(this.name, this.nameStartWith, plainModifedSince, plainComics, plainSeries,
+            return new CharactersQuery(this.name, this.nameStartWith, plainModifiedSince, plainComics, plainSeries,
                     plainEvents, plainStories, plainOrderBy, this.limit, this.offset);
-        }
-
-        private void checkLimit(final int limit) {
-            if (0 >= limit) {
-                throw new IllegalArgumentException("limit must be bigger than zero");
-            }
-
-            if (MAX_SIZE < limit) {
-                throw new IllegalArgumentException("limit must be smaller than 100");
-            }
-        }
-
-        private void checkNull(final List<Integer> list) {
-            if (null == list) {
-                throw new IllegalArgumentException("the collection can not be null");
-            }
-        }
-
-        private String convertDate(final Date date) {
-            if (null == date) {
-                return null;
-            }
-            return DateUtil.parseDate(date);
-        }
-
-        private String convertOrderBy(final String orderBy, final boolean ascendant) {
-            if (null == orderBy) {
-                return null;
-            }
-            return (ascendant) ? orderBy : "-" + orderBy;
-        }
-
-        private String convertToList(final List<Integer> list) {
-            String plainList = "";
-            for (int i = 0; i < list.size(); i++) {
-                plainList += Integer.toString(list.get(i));
-                if (i < list.size() - 1) {
-                    plainList += Builder.LIST_SEPARATOR;
-                }
-            }
-            return (plainList.isEmpty()) ? null : plainList;
         }
     }
 }

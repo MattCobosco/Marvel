@@ -48,7 +48,6 @@ public class NavigationActivity extends AppCompatActivity {
     private FavoriteTableManager favoriteTableManager;
     private HistoryTableManager historyTableManager;
     private ActivityNavigationBinding binding;
-    private TypeToIconDictionary typeToIconDictionary;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,7 +88,6 @@ public class NavigationActivity extends AppCompatActivity {
         } else if (id == R.id.action_history) {
             PopupWindow popupWindow = new PopupWindow(this);
             List<HistoryEntry> history = historyTableManager.getAllHistoryEntries(false);
-            typeToIconDictionary = new TypeToIconDictionary();
 
             popupWindow.setWidth(950);
             popupWindow.setHeight(1150);

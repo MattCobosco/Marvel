@@ -17,12 +17,6 @@ public class CharacterClient extends BaseClient {
         super(marvelApiConfig);
     }
 
-    public BaseResponse<CharactersDto> getAll(final int offset, final int limit) throws IOException {
-        final CharactersQuery query =
-                CharactersQuery.Builder.create().withOffset(offset).withLimit(limit).build();
-        return this.getAll(query);
-    }
-
     public BaseResponse<CharactersDto> getAll(final CharactersQuery charactersQuery)
             throws IOException {
         final CharacterApiRest api = this.getApi(CharacterApiRest.class);

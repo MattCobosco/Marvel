@@ -52,6 +52,9 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        if (!configManager.isHistoryEnabled()) {
+            menu.findItem(R.id.action_history).setVisible(false);
+        }
         AppCompatActivity context = this;
 
         for (int i = 0; i < menu.size(); i++) {
@@ -173,6 +176,10 @@ public class NavigationActivity extends AppCompatActivity {
                 negativeButton.setTextColor(getColor(R.color.red));
             });
 
+            dialog.setOnDismissListener(dialogInterface -> {
+                invalidateOptionsMenu();
+            });
+
             dialog.show();
             return true;
         }
@@ -187,13 +194,13 @@ public class NavigationActivity extends AppCompatActivity {
         binding = ActivityNavigationBinding.inflate(this.getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         apiKeysManager = new ApiKeysManager(getApplicationContext());
         configManager = new ConfigManager(getApplicationContext());
         favoriteTableManager = new FavoriteTableManager(getApplicationContext());
         historyTableManager = new HistoryTableManager(getApplicationContext());
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_characters, R.id.navigation_comics, R.id.navigation_creators)

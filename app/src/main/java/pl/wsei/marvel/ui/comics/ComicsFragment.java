@@ -29,7 +29,7 @@ import core.api.models.DTOs.SeriesDto;
 import core.api.models.SerieRow;
 import core.api.queries.SeriesQuery;
 import core.api.utils.ApiKeysManager;
-import pl.wsei.marvel.adapters.SeriesAdapter;
+import pl.wsei.marvel.adapters.ComicAdapter;
 import pl.wsei.marvel.cache.SeriesCacheSingleton;
 import pl.wsei.marvel.databinding.FragmentComicsBinding;
 import retrofit2.HttpException;
@@ -38,7 +38,7 @@ public class ComicsFragment extends Fragment {
     private ApiKeysManager apiKeysManager;
 
     private List<SerieRow> series = new ArrayList<>();
-    private SeriesAdapter adapter;
+    private ComicAdapter adapter;
     private LruCache<String, List<SerieRow>> cache;
 
     @Override
@@ -54,7 +54,7 @@ public class ComicsFragment extends Fragment {
         String publicKey = apiKeysManager.getPublicKey();
         String privateKey = apiKeysManager.getPrivateKey();
 
-        adapter = new SeriesAdapter(series);
+        adapter = new ComicAdapter(series);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         binding.comicsRecyclerView.setLayoutManager(layoutManager);
         binding.comicsRecyclerView.setAdapter(adapter);
@@ -101,7 +101,7 @@ public class ComicsFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
             } catch (ExecutionException | InterruptedException e) {
-                Log.e("CharactersFragment", "Error while fetching data from API", e);
+                Log.e("ComicsFragment", "Error while fetching data from API", e);
             }
         }
 

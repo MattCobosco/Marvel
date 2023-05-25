@@ -68,8 +68,11 @@ public class CharacterCardActivity extends AppCompatActivity {
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        if (isHistoryEnabled)
-            historyTableManager.addHistoryEntry(new HistoryEntry(Type.CHARACTER, characterId, characterName, System.currentTimeMillis()));
+        if (isHistoryEnabled) {
+            executorService.submit(() -> {
+                historyTableManager.addHistoryEntry(new HistoryEntry(Type.CHARACTER, characterId, characterName, System.currentTimeMillis()));
+            });
+        }
 
         Callable<BaseResponse<CharacterDto>> callable = () -> {
             MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();
@@ -90,12 +93,12 @@ public class CharacterCardActivity extends AppCompatActivity {
             nameTextView.setText(character.getName());
 
             ImageView characterFavorite = findViewById(R.id.character_favorite);
-            characterFavorite.setImageDrawable(isFavorite ? getDrawable(favoriteIcon) : getDrawable(notFavoriteIcon));
+            characterFavorite.setImageResource(isFavorite ? favoriteIcon : notFavoriteIcon);
 
+            String characterDescription = character.getDescription();
             TextView descriptionTextView = findViewById(R.id.character_description);
-
-            descriptionTextView.setText(character.getDescription());
-            if (character.getDescription().isEmpty()) {
+            descriptionTextView.setText(characterDescription);
+            if (characterDescription == null || characterDescription.isEmpty()) {
                 NestedScrollView characterDescriptionNestedScroll = findViewById(R.id.character_description_scroll);
                 characterDescriptionNestedScroll.getLayoutParams().height = 0;
             }

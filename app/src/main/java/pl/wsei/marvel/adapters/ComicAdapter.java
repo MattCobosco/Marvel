@@ -18,17 +18,17 @@ import core.api.models.SerieRow;
 import pl.wsei.marvel.R;
 import pl.wsei.marvel.ui.comics.ComicCardActivity;
 
-public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.ViewHolder> {
+public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> {
     private List<SerieRow> series;
 
-    public SeriesAdapter(final List<SerieRow> series) {
+    public ComicAdapter(final List<SerieRow> series) {
         this.series = series;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_series_row, parent, false);
+                .inflate(R.layout.fragment_comics_row, parent, false);
         return new ViewHolder(view);
     }
 
@@ -43,12 +43,12 @@ public class SeriesAdapter extends RecyclerView.Adapter<SeriesAdapter.ViewHolder
                 .into(holder.thumbnailImageView);
 
         holder.itemView.setOnClickListener(v -> {
-            final String seriesId = seriesRow.getId();
-            final String seriesTitle = seriesRow.getTitle();
+            final String comicId = seriesRow.getId();
+            final String comicTitle = seriesRow.getTitle();
 
             final Intent intent = new Intent(v.getContext(), ComicCardActivity.class);
-            intent.putExtra("series_id", seriesId);
-            intent.putExtra("series_title", seriesTitle);
+            intent.putExtra("comic_id", comicId);
+            intent.putExtra("comic_title", comicTitle);
             v.getContext().startActivity(intent);
         });
     }

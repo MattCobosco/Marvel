@@ -14,14 +14,14 @@ import java.util.List;
 
 import pl.wsei.marvel.R;
 
-public class CharacterSeriesAdapter extends ArrayAdapter<String> {
+public class ComicCreatorsAdapter extends ArrayAdapter<String> {
     private final Context context;
-    private final List<String> series;
+    private final List<String> creators;
 
-    public CharacterSeriesAdapter(final Context context, final List<String> series) {
-        super(context, R.layout.fragment_character_comics, series);
+    public ComicCreatorsAdapter(final Context context, final List<String> creators) {
+        super(context, R.layout.fragment_comic_creators, creators);
         this.context = context;
-        this.series = series;
+        this.creators = creators;
     }
 
     @NonNull
@@ -29,11 +29,11 @@ public class CharacterSeriesAdapter extends ArrayAdapter<String> {
     public View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent) {
         View view = convertView;
         if (null == view) {
-            view = LayoutInflater.from(this.context).inflate(R.layout.fragment_character_comics, parent, false);
+            view = LayoutInflater.from(this.context).inflate(R.layout.fragment_comic_creators, parent, false);
         }
-        final String seriesName = this.getItem(position);
-        final TextView seriesTextView = view.findViewById(R.id.character_series_name);
-        seriesTextView.setText(seriesName);
+        final String creatorName = this.getItem(position);
+        final TextView creatorTextView = view.findViewById(R.id.comic_creator_name);
+        creatorTextView.setText(creatorName);
         return view;
     }
 }

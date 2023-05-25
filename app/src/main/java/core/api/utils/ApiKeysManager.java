@@ -27,7 +27,7 @@ public class ApiKeysManager {
     }
 
     private void checkFile() {
-        File file = new File(APIKEY_FILENAME);
+        File file = new File(context.getFilesDir(), APIKEY_FILENAME);
         if (!file.exists()) {
             try {
                 file.createNewFile();

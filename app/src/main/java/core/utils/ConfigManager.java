@@ -25,7 +25,7 @@ public class ConfigManager {
     }
 
     private void checkFile() {
-        File file = new File(CONFIG_FILENAME);
+        File file = new File(context.getFilesDir(), CONFIG_FILENAME);
         if (!file.exists()) {
             try {
                 file.createNewFile();

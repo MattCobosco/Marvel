@@ -28,8 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="image_placeholder" />
-                            <entry key="sourceFile" value="C:\Users\mateu\StudioProjects\Marvel" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="loading_element" />
+                            <entry key="sourceFile" value="C:\Users\mateu\Downloads\Mediamodifier-Design (1).svg" />
                           </map>
                         </option>
                       </PersistentState>

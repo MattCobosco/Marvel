@@ -87,7 +87,7 @@ public class CharacterCardActivity extends AppCompatActivity {
         try {
             BaseResponse<CharacterDto> response = future.get();
             character = response.getResponse();
-            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite(Type.CHARACTER, character.getId()));
+            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite(Type.CHARACTER, character.getId(), character.getName()));
 
             TextView nameTextView = findViewById(R.id.character_name);
             nameTextView.setText(character.getName());
@@ -129,7 +129,7 @@ public class CharacterCardActivity extends AppCompatActivity {
         ImageView characterFavorite = findViewById(R.id.character_favorite);
 
         characterFavorite.setOnClickListener(v -> {
-            Favorite favorite = new Favorite(Type.CHARACTER, character.getId());
+            Favorite favorite = new Favorite(Type.CHARACTER, character.getId(), character.getName());
             if (characterFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
                 characterFavorite.setImageResource(favoriteIcon);
                 favoriteTableManager.addFavorite(favorite);

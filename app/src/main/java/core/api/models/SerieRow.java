@@ -23,7 +23,6 @@ public class SerieRow implements Parcelable {
         this.thumbnailUrl = in.readString();
     }
 
-
     public static final Parcelable.Creator<SerieRow> CREATOR = new Parcelable.Creator<SerieRow>() {
         @Override
         public SerieRow createFromParcel(Parcel in) {
@@ -35,7 +34,6 @@ public class SerieRow implements Parcelable {
             return new SerieRow[size];
         }
     };
-
 
     public String getId() {
         return this.id;

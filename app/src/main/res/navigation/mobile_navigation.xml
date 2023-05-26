@@ -22,4 +22,11 @@
         android:name="pl.wsei.marvel.ui.creators.CreatorsFragment"
         android:label="@string/title_creators"
         tools:layout="@layout/fragment_creators" />
+
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="pl.wsei.marvel.ui.favorites.FavoritesFragment"
+        android:label="@string/title_favorites"
+        tools:layout="@layout/fragment_favorites" />
+
 </navigation>

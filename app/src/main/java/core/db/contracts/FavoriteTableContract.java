@@ -9,5 +9,6 @@ public final class FavoriteTableContract {
         public static final String TABLE_NAME = "favorite";
         public static final String COLUMN_NAME_TYPE = "type";
         public static final String COLUMN_NAME_ID = "id";
+        public static final String COLUMN_NAME_NAME = "name";
     }
 }

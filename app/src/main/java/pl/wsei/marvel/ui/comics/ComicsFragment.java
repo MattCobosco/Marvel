@@ -36,7 +36,6 @@ import retrofit2.HttpException;
 
 public class ComicsFragment extends Fragment {
     private ApiKeysManager apiKeysManager;
-
     private List<SerieRow> series = new ArrayList<>();
     private ComicAdapter adapter;
     private LruCache<String, List<SerieRow>> cache;

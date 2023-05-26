@@ -86,7 +86,7 @@ public class ComicCardActivity extends AppCompatActivity {
         try {
             BaseResponse<SerieDto> response = future.get();
             serie = response.getResponse();
-            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite(Type.COMIC, serie.getId()));
+            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite(Type.COMIC, serie.getId(), serie.getTitle()));
 
             TextView comicTitleTextView = findViewById(R.id.comic_title);
             comicTitleTextView.setText(serie.getTitle());
@@ -129,7 +129,7 @@ public class ComicCardActivity extends AppCompatActivity {
         ImageView comicFavorite = findViewById(R.id.comic_favorite);
 
         comicFavorite.setOnClickListener(v -> {
-            Favorite favorite = new Favorite(Type.CHARACTER, serie.getId());
+            Favorite favorite = new Favorite(Type.COMIC, serie.getId(), serie.getTitle());
             if (comicFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
                 comicFavorite.setImageResource(favoriteIcon);
                 favoriteTableManager.addFavorite(favorite);

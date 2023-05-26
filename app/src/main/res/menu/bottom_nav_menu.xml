@@ -16,4 +16,9 @@
         android:icon="@drawable/recent_actors_24"
         android:title="@string/title_creators" />
 
+    <item
+        android:id="@+id/navigation_favorites"
+        android:icon="@drawable/star_24"
+        android:title="@string/favorites" />
+
 </menu>

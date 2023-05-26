@@ -60,4 +60,6 @@
     <string name="clear_favorites">Clear favorites</string>
     <string name="clear_browsing_history">Clear browsing history</string>
     <string name="history">History</string>
+    <string name="favorites">Favorites</string>
+    <string name="title_favorites">Favorites</string>
 </resources>

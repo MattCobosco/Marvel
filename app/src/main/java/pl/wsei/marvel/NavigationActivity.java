@@ -203,7 +203,7 @@ public class NavigationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_characters, R.id.navigation_comics, R.id.navigation_creators)
+                R.id.navigation_characters, R.id.navigation_comics, R.id.navigation_creators, R.id.navigation_favorites)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_navigation);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

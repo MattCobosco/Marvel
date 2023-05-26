@@ -17,7 +17,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             "CREATE TABLE " + FavoriteTableContract.FavoriteTableEntry.TABLE_NAME + " (" +
                     BaseColumns._ID + " INTEGER PRIMARY KEY," +
                     FavoriteTableContract.FavoriteTableEntry.COLUMN_NAME_TYPE + " TEXT," +
-                    FavoriteTableContract.FavoriteTableEntry.COLUMN_NAME_ID + " TIMESTAMP)";
+                    FavoriteTableContract.FavoriteTableEntry.COLUMN_NAME_ID + " TEXT," +
+                    FavoriteTableContract.FavoriteTableEntry.COLUMN_NAME_NAME + " TEXT)";
+
 
     private static final String SQL_DELETE_FAVORITE_TABLE =
             "DROP TABLE IF EXISTS " + FavoriteTableContract.FavoriteTableEntry.TABLE_NAME;

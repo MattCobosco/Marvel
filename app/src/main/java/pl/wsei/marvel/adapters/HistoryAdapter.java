@@ -15,7 +15,6 @@ import pl.wsei.marvel.R;
 import pl.wsei.marvel.TypeToIconDictionary;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
-
     private List<HistoryEntry> historyList;
 
     public HistoryAdapter(List<HistoryEntry> historyList) {

@@ -36,7 +36,7 @@ public class FavoriteTableManager {
 
     public List<Favorite> getAllFavorites(@Nullable String[] orderBys) {
         final SQLiteDatabase db = this.databaseHelper.getReadableDatabase();
-        final Cursor cursor = db.query("favorite", new String[]{"type", "id", "name"}, null, null,null, null, orderBys != null ? String.join(",", orderBys) : null);
+        final Cursor cursor = db.query("favorite", new String[]{"type", "id", "name"}, null, null, null, null, orderBys != null ? String.join(",", orderBys) : null);
         final List<Favorite> favorites = new ArrayList<>();
         while (cursor.moveToNext()) {
             final Type type = Type.valueOf(cursor.getString(0));

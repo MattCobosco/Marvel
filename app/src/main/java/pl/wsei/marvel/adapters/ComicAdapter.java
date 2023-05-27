@@ -15,8 +15,9 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import core.api.models.SerieRow;
+import core.enums.Type;
+import core.utils.IntentFactory;
 import pl.wsei.marvel.R;
-import pl.wsei.marvel.ui.comics.ComicCardActivity;
 
 public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> {
     private List<SerieRow> series;
@@ -24,6 +25,8 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> 
     public ComicAdapter(final List<SerieRow> series) {
         this.series = series;
     }
+
+    private IntentFactory intentFactory;
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
@@ -34,6 +37,7 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        intentFactory = new IntentFactory(holder.itemView.getContext());
         final SerieRow seriesRow = this.series.get(position);
         holder.titleTextView.setText(seriesRow.getTitle());
         holder.descriptionTextView.setText(seriesRow.getDescription());
@@ -46,9 +50,7 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> 
             final String comicId = seriesRow.getId();
             final String comicTitle = seriesRow.getTitle();
 
-            final Intent intent = new Intent(v.getContext(), ComicCardActivity.class);
-            intent.putExtra("comic_id", comicId);
-            intent.putExtra("comic_title", comicTitle);
+            final Intent intent = intentFactory.createIntent(Type.COMIC, comicId, comicTitle);
             v.getContext().startActivity(intent);
         });
     }

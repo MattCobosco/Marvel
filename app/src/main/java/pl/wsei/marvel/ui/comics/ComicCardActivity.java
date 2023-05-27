@@ -62,8 +62,8 @@ public class ComicCardActivity extends AppCompatActivity {
         permissionManager = new PermissionManager(this);
         boolean isHistoryEnabled = configManager.isHistoryEnabled();
 
-        String comicId = getIntent().getStringExtra("comic_id");
-        String comicTitle = getIntent().getStringExtra("comic_title");
+        String comicId = getIntent().getStringExtra("id");
+        String comicTitle = getIntent().getStringExtra("name");
         String publicKey = apiKeysManager.getPublicKey();
         String privateKey = apiKeysManager.getPrivateKey();
 
@@ -97,8 +97,7 @@ public class ComicCardActivity extends AppCompatActivity {
             String comicDescription = serie.getDescription();
             TextView comicDescriptionTextView = findViewById(R.id.comic_description);
             comicDescriptionTextView.setText(comicDescription);
-            if(comicDescription == null || comicDescription.isEmpty())
-            {
+            if (comicDescription == null || comicDescription.isEmpty()) {
                 NestedScrollView serieDescriptionNestedScroll = findViewById(R.id.comic_description_scroll);
                 serieDescriptionNestedScroll.getLayoutParams().height = 0;
             }
@@ -133,7 +132,7 @@ public class ComicCardActivity extends AppCompatActivity {
             if (comicFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
                 comicFavorite.setImageResource(favoriteIcon);
                 favoriteTableManager.addFavorite(favorite);
-                Toast.makeText(this, String.format("Added %s to favorites", serie.getTitle()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, String.format("Added %s to favorites", serie.getId()), Toast.LENGTH_SHORT).show();
             } else {
                 comicFavorite.setImageResource(notFavoriteIcon);
                 favoriteTableManager.removeFavorite(favorite);

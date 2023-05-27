@@ -61,8 +61,8 @@ public class CharacterCardActivity extends AppCompatActivity {
         permissionManager = new PermissionManager(this);
         boolean isHistoryEnabled = configManager.isHistoryEnabled();
 
-        String characterId = getIntent().getStringExtra("character_id");
-        String characterName = getIntent().getStringExtra("character_name");
+        String characterId = getIntent().getStringExtra("id");
+        String characterName = getIntent().getStringExtra("name");
         String publicKey = apiKeysManager.getPublicKey();
         String privateKey = apiKeysManager.getPrivateKey();
 
@@ -133,7 +133,7 @@ public class CharacterCardActivity extends AppCompatActivity {
             if (characterFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
                 characterFavorite.setImageResource(favoriteIcon);
                 favoriteTableManager.addFavorite(favorite);
-                Toast.makeText(this, String.format("Added %s to favorites", character.getName()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, String.format("Added %s to favorites", character.getId()), Toast.LENGTH_SHORT).show();
             } else {
                 characterFavorite.setImageResource(notFavoriteIcon);
                 favoriteTableManager.removeFavorite(favorite);

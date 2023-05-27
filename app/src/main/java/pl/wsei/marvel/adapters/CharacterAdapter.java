@@ -15,16 +15,18 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import core.api.models.CharacterRow;
+import core.enums.Type;
+import core.utils.IntentFactory;
 import pl.wsei.marvel.R;
-import pl.wsei.marvel.ui.characters.CharacterCardActivity;
 
 public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.ViewHolder> {
-
     private List<CharacterRow> characters;
 
     public CharacterAdapter(final List<CharacterRow> characters) {
         this.characters = characters;
     }
+
+    private IntentFactory intentFactory;
 
     @NonNull
     @Override
@@ -36,6 +38,7 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        intentFactory = new IntentFactory(holder.itemView.getContext());
         final CharacterRow characterRow = this.characters.get(position);
         holder.nameTextView.setText(characterRow.getName());
         holder.descriptionTextView.setText(characterRow.getDescription());
@@ -47,10 +50,7 @@ public class CharacterAdapter extends RecyclerView.Adapter<CharacterAdapter.View
         holder.itemView.setOnClickListener(v -> {
             final String characterId = characterRow.getId();
             final String characterName = characterRow.getName();
-
-            final Intent intent = new Intent(v.getContext(), CharacterCardActivity.class);
-            intent.putExtra("character_id", characterId);
-            intent.putExtra("character_name", characterName);
+            final Intent intent = intentFactory.createIntent(Type.CHARACTER, characterId, characterName);
             v.getContext().startActivity(intent);
         });
     }

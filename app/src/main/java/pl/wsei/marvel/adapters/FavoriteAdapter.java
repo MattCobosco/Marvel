@@ -1,5 +1,6 @@
 package pl.wsei.marvel.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import core.db.models.Favorite;
+import core.enums.Type;
+import core.utils.IntentFactory;
 import pl.wsei.marvel.R;
 import pl.wsei.marvel.TypeToIconDictionary;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavoritesViewHolder> {
     private List<Favorite> favorites;
+
     public FavoriteAdapter(List<Favorite> favorites) {
         this.favorites = favorites;
     }
+
+    private IntentFactory intentFactory;
 
     @Override
     public FavoritesViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
@@ -30,11 +36,21 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
 
     @Override
     public void onBindViewHolder(FavoritesViewHolder holder, int position) {
+        intentFactory = new IntentFactory(holder.itemView.getContext());
         final Favorite favorite = this.favorites.get(position);
 
         holder.typeImageView.setImageResource(TypeToIconDictionary.getIcon(favorite.getType()));
         holder.idTextView.setText(favorite.getId());
         holder.nameTextView.setText(favorite.getName());
+
+        holder.itemView.setOnClickListener(v -> {
+            final Type type = favorite.getType();
+            final String id = favorite.getId();
+            final String name = favorite.getName();
+
+            final Intent intent = intentFactory.createIntent(type, id, name);
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override

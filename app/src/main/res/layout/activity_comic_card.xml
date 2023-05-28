@@ -55,18 +55,43 @@
             <TextView
                 android:id="@+id/comic_description"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Description"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="@string/description"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
         </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
+            android:id="@+id/comic_characters"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/comic_characters_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Characters"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/comic_characters_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true"
+                android:padding="16dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/comic_creators"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="150dp"
             android:orientation="vertical">
 
             <TextView

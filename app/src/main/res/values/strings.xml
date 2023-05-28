@@ -62,4 +62,5 @@
     <string name="history">History</string>
     <string name="favorites">Favorites</string>
     <string name="title_favorites">Favorites</string>
+    <string name="description">Description</string>
 </resources>

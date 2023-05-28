@@ -3,7 +3,9 @@ package pl.wsei.marvel.ui.comics;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +15,7 @@ import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -24,6 +27,8 @@ import java.util.stream.Collectors;
 import core.MarvelApiConfig;
 import core.api.clients.SeriesClient;
 import core.api.models.DTOs.BaseResponse;
+import core.api.models.DTOs.CharacterResourceDto;
+import core.api.models.DTOs.CreatorResourceDto;
 import core.api.models.DTOs.ImageDto;
 import core.api.models.DTOs.ResourceDto;
 import core.api.models.DTOs.ResourcesDto;
@@ -38,6 +43,7 @@ import core.utils.ConfigManager;
 import core.utils.FileManager;
 import core.utils.PermissionManager;
 import pl.wsei.marvel.R;
+import pl.wsei.marvel.adapters.ComicCharactersAdapter;
 import pl.wsei.marvel.adapters.ComicCreatorsAdapter;
 import pl.wsei.marvel.ui.characters.CharacterCardActivity;
 
@@ -116,10 +122,23 @@ public class ComicCardActivity extends AppCompatActivity {
                 return true;
             });
 
-            List<String> creatorsList = serie.getCreators().getItems().stream().map(ResourceDto::getName).collect(Collectors.toList());
+            List<CreatorResourceDto> creatorsList = new ArrayList<>(serie.getCreators().getItems());
             ListView creatorsListView = findViewById(R.id.comic_creators_list);
             ComicCreatorsAdapter creatorsAdapter = new ComicCreatorsAdapter(this, creatorsList);
             creatorsListView.setAdapter(creatorsAdapter);
+            if (creatorsList.isEmpty()) {
+                LinearLayout serieCreatorsLayout = findViewById(R.id.comic_creators);
+                serieCreatorsLayout.setVisibility(View.GONE);
+            }
+
+            List<CharacterResourceDto> charactersList = new ArrayList<>(serie.getCharacters().getItems());
+            ListView charactersListView = findViewById(R.id.comic_characters_list);
+            ComicCharactersAdapter charactersAdapter = new ComicCharactersAdapter(this, charactersList);
+            charactersListView.setAdapter(charactersAdapter);
+            if (charactersList.isEmpty()) {
+                LinearLayout serieCharactersLayout = findViewById(R.id.comic_characters);
+                serieCharactersLayout.setVisibility(View.GONE);
+            }
 
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);

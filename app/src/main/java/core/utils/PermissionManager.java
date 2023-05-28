@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat;
 
 public class PermissionManager {
     private static final int PERMISSION_REQUEST_CODE = 1;
-    private AppCompatActivity activity;
+    private final AppCompatActivity activity;
     private Runnable permissionRunnable;
 
     public PermissionManager(AppCompatActivity activity) {

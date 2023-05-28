@@ -32,7 +32,7 @@ public class FavoritesFragment extends Fragment {
         View root = binding.getRoot();
 
         favoriteTableManager = new FavoriteTableManager(this.getActivity());
-        String params[] = {"type", "name"};
+        String[] params = {"type", "name"};
         favorites = favoriteTableManager.getAllFavorites(params);
 
         adapter = new FavoriteAdapter(favorites);

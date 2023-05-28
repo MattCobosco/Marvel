@@ -6,9 +6,10 @@ import android.content.Intent;
 import core.enums.Type;
 import pl.wsei.marvel.ui.characters.CharacterCardActivity;
 import pl.wsei.marvel.ui.comics.ComicCardActivity;
+import pl.wsei.marvel.ui.creators.CreatorCardActivity;
 
 public class IntentFactory {
-    private Context context;
+    private final Context context;
 
     public IntentFactory(Context context) {
         this.context = context;
@@ -27,8 +28,8 @@ public class IntentFactory {
                 return ComicCardActivity.class;
             case CHARACTER:
                 return CharacterCardActivity.class;
-//            case CREATOR:
-//                return CreatorCardActivity.class;
+            case CREATOR:
+                return CreatorCardActivity.class;
             default:
                 return null;
         }

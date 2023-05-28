@@ -19,7 +19,7 @@ import pl.wsei.marvel.R;
 import pl.wsei.marvel.TypeToIconDictionary;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavoritesViewHolder> {
-    private List<Favorite> favorites;
+    private final List<Favorite> favorites;
 
     public FavoriteAdapter(List<Favorite> favorites) {
         this.favorites = favorites;

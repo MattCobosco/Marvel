@@ -53,10 +53,10 @@ public class ComicCardActivity extends AppCompatActivity {
     private FileManager fileManager;
     private PermissionManager permissionManager;
     private SerieDto serie;
-    private FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
-    private HistoryTableManager historyTableManager = new HistoryTableManager(this);
-    private int favoriteIcon = R.drawable.star_24;
-    private int notFavoriteIcon = R.drawable.star_outline_24;
+    private final FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
+    private final HistoryTableManager historyTableManager = new HistoryTableManager(this);
+    private final int favoriteIcon = R.drawable.star_24;
+    private final int notFavoriteIcon = R.drawable.star_outline_24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

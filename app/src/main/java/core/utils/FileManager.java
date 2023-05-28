@@ -6,7 +6,7 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 public class FileManager {
-    private Context context;
+    private final Context context;
     TimeProvider timeProvider = new TimeProvider();
 
     public FileManager(Context context) {

@@ -14,20 +14,20 @@ import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 import core.MarvelApiConfig;
 import core.api.clients.CharacterClient;
 import core.api.models.DTOs.BaseResponse;
 import core.api.models.DTOs.CharacterDto;
 import core.api.models.DTOs.ImageDto;
-import core.api.models.DTOs.ResourceDto;
+import core.api.models.DTOs.SeriesResourceDto;
 import core.api.utils.ApiKeysManager;
 import core.db.FavoriteTableManager;
 import core.db.HistoryTableManager;
@@ -46,10 +46,10 @@ public class CharacterCardActivity extends AppCompatActivity {
     private FileManager fileManager;
     private PermissionManager permissionManager;
     private CharacterDto character;
-    private FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
-    private HistoryTableManager historyTableManager = new HistoryTableManager(this);
-    private int favoriteIcon = R.drawable.star_24;
-    private int notFavoriteIcon = R.drawable.star_outline_24;
+    private final FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
+    private final HistoryTableManager historyTableManager = new HistoryTableManager(this);
+    private final int favoriteIcon = R.drawable.star_24;
+    private final int notFavoriteIcon = R.drawable.star_outline_24;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +117,7 @@ public class CharacterCardActivity extends AppCompatActivity {
                 return true;
             });
 
-            List<String> seriesList = character.getSeries().getItems().stream().map(ResourceDto::getName).collect(Collectors.toList());
+            List<SeriesResourceDto> seriesList = new ArrayList<>(character.getSeries().getItems());
             ListView seriesListView = findViewById(R.id.character_series_list);
             CharacterSeriesAdapter seriesAdapter = new CharacterSeriesAdapter(this, seriesList);
             seriesListView.setAdapter(seriesAdapter);

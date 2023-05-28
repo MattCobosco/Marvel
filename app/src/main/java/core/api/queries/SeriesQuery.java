@@ -113,11 +113,11 @@ public class SeriesQuery {
         private String title;
         private String titleStartsWith;
         private Date modifiedSince;
-        private List<Integer> comics = new ArrayList<>();
-        private List<Integer> stories = new ArrayList<>();
-        private List<Integer> events = new ArrayList<>();
-        private List<Integer> creators = new ArrayList<>();
-        private List<Integer> characters = new ArrayList<>();
+        private final List<Integer> comics = new ArrayList<>();
+        private final List<Integer> stories = new ArrayList<>();
+        private final List<Integer> events = new ArrayList<>();
+        private final List<Integer> creators = new ArrayList<>();
+        private final List<Integer> characters = new ArrayList<>();
         private String seriesType;
         private String contains;
         private String orderBy;

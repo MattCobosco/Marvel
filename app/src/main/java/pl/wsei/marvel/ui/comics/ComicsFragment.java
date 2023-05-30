@@ -72,6 +72,7 @@ public class ComicsFragment extends Fragment {
         if (cachedData != null) {
             series = cachedData;
             adapter.updateData(series);
+            hideProgressBar();
         } else {
             callable = () -> {
                 MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();

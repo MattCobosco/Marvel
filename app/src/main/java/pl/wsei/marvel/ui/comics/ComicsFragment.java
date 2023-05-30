@@ -98,23 +98,18 @@ public class ComicsFragment extends Fragment {
                         }
                         cache.put("series", series);
                         adapter.updateData(series);
-                        hideProgressBar();
                     });
                 } catch (HttpException e) {
                     if (e.code() == 401) {
-                        getActivity().runOnUiThread(() -> {
                             Toast.makeText(getActivity(), "Unauthorized. Check if your API Key is correct", Toast.LENGTH_SHORT).show();
                             adapter.updateData(new ArrayList<>());
-                            hideProgressBar();
-                        });
                     } else {
                         throw new RuntimeException(e);
                     }
                 } catch (ExecutionException | InterruptedException e) {
-                    getActivity().runOnUiThread(() -> {
                         Log.e("ComicsFragment", "Error while fetching data from API", e);
-                        hideProgressBar();
-                    });
+                } finally {
+                    getActivity().runOnUiThread(() -> hideProgressBar());
                 }
             });
         }

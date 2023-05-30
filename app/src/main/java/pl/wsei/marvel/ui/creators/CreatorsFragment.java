@@ -6,6 +6,7 @@ import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,16 +24,11 @@ import java.util.concurrent.Future;
 
 import core.MarvelApiConfig;
 import core.api.clients.CreatorClient;
-import core.api.clients.SeriesClient;
 import core.api.models.CreatorRow;
 import core.api.models.DTOs.BaseResponse;
 import core.api.models.DTOs.CreatorDto;
 import core.api.models.DTOs.CreatorsDto;
-import core.api.models.DTOs.SerieDto;
-import core.api.models.DTOs.SeriesDto;
-import core.api.models.SerieRow;
 import core.api.queries.CreatorsQuery;
-import core.api.queries.SeriesQuery;
 import core.api.utils.ApiKeysManager;
 import pl.wsei.marvel.adapters.CreatorAdapter;
 import pl.wsei.marvel.cache.CreatorsCacheSingleton;
@@ -44,6 +40,7 @@ public class CreatorsFragment extends Fragment {
     private List<CreatorRow> creators = new ArrayList<>();
     private CreatorAdapter adapter;
     private LruCache<String, List<CreatorRow>> cache;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,6 +59,8 @@ public class CreatorsFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         binding.creatorsRecyclerView.setLayoutManager(layoutManager);
         binding.creatorsRecyclerView.setAdapter(adapter);
+        progressBar = binding.progressBar;
+        showProgressBar();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -73,6 +72,7 @@ public class CreatorsFragment extends Fragment {
         if (cachedData != null) {
             creators = cachedData;
             adapter.updateData(creators);
+            hideProgressBar();
         } else {
             callable = () -> {
                 MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();
@@ -86,31 +86,47 @@ public class CreatorsFragment extends Fragment {
 
             future = executorService.submit(callable);
 
-            try {
-                BaseResponse<CreatorsDto> all = future.get();
+            executorService.execute(() -> {
+                try {
+                    BaseResponse<CreatorsDto> all = future.get();
 
-                getActivity().runOnUiThread(() -> {
-                    List<CreatorDto> creatorDtos = all.getResponse().getCreators();
-                    for (CreatorDto creatorDto : creatorDtos) {
-                        CreatorRow creatorRow = new CreatorRow(creatorDto.getId(), creatorDto.getFullName(), creatorDto.getThumbnail().getPath() + "." + creatorDto.getThumbnail().getExtension());
-                        creators.add(creatorRow);
+                    getActivity().runOnUiThread(() -> {
+                        List<CreatorDto> creatorDtos = all.getResponse().getCreators();
+                        for (CreatorDto creatorDto : creatorDtos) {
+                            CreatorRow creatorRow = new CreatorRow(creatorDto.getId(), creatorDto.getFullName(), creatorDto.getThumbnail().getPath() + "." + creatorDto.getThumbnail().getExtension());
+                            creators.add(creatorRow);
+                        }
+                        cache.put("creators", creators);
+                        adapter.updateData(creators);
+                    });
+                } catch (HttpException e) {
+                    if (e.code() == 401) {
+                        Toast.makeText(getActivity(), "Unauthorized. Check if your API Key is correct", Toast.LENGTH_SHORT).show();
+                        adapter.updateData(new ArrayList<>());
+                    } else {
+                        throw new RuntimeException(e);
                     }
-                    cache.put("creators", creators);
-                    adapter.updateData(creators);
-                });
-            } catch (HttpException e) {
-                if (e.code() == 401) {
-                    Toast.makeText(getActivity(), "Unauthorized. Check if your API Key is correct", Toast.LENGTH_SHORT).show();
-                    adapter.updateData(new ArrayList<>());
-                } else {
-                    throw new RuntimeException(e);
+                } catch (ExecutionException | InterruptedException e) {
+                    Log.e("CreatorsFragment", "Error while fetching data from API", e);
+                } finally {
+                    getActivity().runOnUiThread(() -> hideProgressBar());
                 }
-            } catch (ExecutionException | InterruptedException e) {
-                Log.e("CreatorsFragment", "Error while fetching data from API", e);
-            }
+            });
         }
 
         return root;
+    }
+
+    private void showProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
 }

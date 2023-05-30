@@ -151,7 +151,7 @@ public class ComicCardActivity extends AppCompatActivity {
             if (comicFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
                 comicFavorite.setImageResource(favoriteIcon);
                 favoriteTableManager.addFavorite(favorite);
-                Toast.makeText(this, String.format("Added %s to favorites", serie.getId()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, String.format("Added %s to favorites", serie.getTitle()), Toast.LENGTH_SHORT).show();
             } else {
                 comicFavorite.setImageResource(notFavoriteIcon);
                 favoriteTableManager.removeFavorite(favorite);
@@ -177,5 +177,4 @@ public class ComicCardActivity extends AppCompatActivity {
         favoriteTableManager.closeDbConnection();
         historyTableManager.closeDbConnection();
     }
-
 }

@@ -1,16 +1,16 @@
-package pl.wsei.marvel.ui.characters;
-
+package pl.wsei.marvel.ui.creators;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
 
@@ -23,9 +23,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import core.MarvelApiConfig;
-import core.api.clients.CharacterClient;
+import core.api.clients.CreatorClient;
 import core.api.models.DTOs.BaseResponse;
-import core.api.models.DTOs.CharacterDto;
+import core.api.models.DTOs.CreatorDto;
 import core.api.models.DTOs.ImageDto;
 import core.api.models.DTOs.SeriesResourceDto;
 import core.api.utils.ApiKeysManager;
@@ -38,73 +38,65 @@ import core.utils.ConfigManager;
 import core.utils.FileManager;
 import core.utils.PermissionManager;
 import pl.wsei.marvel.R;
-import pl.wsei.marvel.adapters.CharacterSeriesAdapter;
+import pl.wsei.marvel.adapters.CreatorSeriesAdapter;
 
-public class CharacterCardActivity extends AppCompatActivity {
+public class CreatorCardActivity extends AppCompatActivity {
     private ApiKeysManager apiKeysManager;
     private ConfigManager configManager;
     private FileManager fileManager;
     private PermissionManager permissionManager;
-    private CharacterDto character;
+    private CreatorDto creator;
+
     private final FavoriteTableManager favoriteTableManager = new FavoriteTableManager(this);
     private final HistoryTableManager historyTableManager = new HistoryTableManager(this);
     private final int favoriteIcon = R.drawable.star_24;
     private final int notFavoriteIcon = R.drawable.star_outline_24;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_character_card);
+        setContentView(R.layout.activity_creator_card);
         apiKeysManager = new ApiKeysManager(this);
         configManager = new ConfigManager(this);
         fileManager = new FileManager(this);
         permissionManager = new PermissionManager(this);
         boolean isHistoryEnabled = configManager.isHistoryEnabled();
 
-        String characterId = getIntent().getStringExtra("id");
-        String characterName = getIntent().getStringExtra("name");
+        String creatorId = getIntent().getStringExtra("id");
+        String creatorName = getIntent().getStringExtra("name");
         String publicKey = apiKeysManager.getPublicKey();
         String privateKey = apiKeysManager.getPrivateKey();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        if (isHistoryEnabled) {
+        if(isHistoryEnabled) {
             executorService.submit(() -> {
-                historyTableManager.addHistoryEntry(new HistoryEntry(Type.CHARACTER, characterId, characterName, System.currentTimeMillis()));
+                HistoryEntry historyEntry = new HistoryEntry(Type.CREATOR, creatorId, creatorName,System.currentTimeMillis());
+                historyTableManager.addHistoryEntry(historyEntry);
             });
         }
 
-        Callable<BaseResponse<CharacterDto>> callable = () -> {
+        Callable<BaseResponse<CreatorDto>> callable = () -> {
             MarvelApiConfig marvelApiConfig = new MarvelApiConfig.Builder(publicKey, privateKey).build();
-
-            CharacterClient characterClient = new CharacterClient(marvelApiConfig);
-
-            return characterClient.getCharacter(characterId);
+            CreatorClient creatorClient = new CreatorClient(marvelApiConfig);
+            return creatorClient.getCreator(creatorId);
         };
 
-        Future<BaseResponse<CharacterDto>> future = executorService.submit(callable);
+        Future<BaseResponse<CreatorDto>> future = executorService.submit(callable);
 
         try {
-            BaseResponse<CharacterDto> response = future.get();
-            character = response.getResponse();
-            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite(Type.CHARACTER, character.getId(), character.getName()));
+            BaseResponse<CreatorDto> response = future.get();
+            creator = response.getResponse();
+            Boolean isFavorite = favoriteTableManager.isFavorite(new Favorite(Type.CREATOR, creator.getId(), creator.getFullName()));
 
-            TextView nameTextView = findViewById(R.id.character_name);
-            nameTextView.setText(character.getName());
+            TextView creatorNameTextView = findViewById(R.id.creator_full_name);
+            creatorNameTextView.setText(creator.getFullName());
 
-            ImageView characterFavorite = findViewById(R.id.character_favorite);
-            characterFavorite.setImageResource(isFavorite ? favoriteIcon : notFavoriteIcon);
+            ImageView creatorFavoriteImageView = findViewById(R.id.creator_favorite);
+            creatorFavoriteImageView.setImageResource(isFavorite ? favoriteIcon : notFavoriteIcon);
 
-            String characterDescription = character.getDescription();
-            TextView descriptionTextView = findViewById(R.id.character_description);
-            descriptionTextView.setText(characterDescription);
-            if (characterDescription == null || characterDescription.isEmpty()) {
-                NestedScrollView characterDescriptionNestedScroll = findViewById(R.id.character_description_scroll);
-                characterDescriptionNestedScroll.getLayoutParams().height = 0;
-            }
-
-            ImageView imageView = findViewById(R.id.character_image);
-            Glide.with(this).load(character.getThumbnail().getImageUrl(ImageDto.Size.FULLSIZE)).into(imageView);
+            ImageView imageView = findViewById(R.id.creator_image);
+            Glide.with(this).load(creator.getThumbnail().getImageUrl(ImageDto.Size.FULLSIZE)).into(imageView);
 
             imageView.setOnLongClickListener(v -> {
                 BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
@@ -117,34 +109,37 @@ public class CharacterCardActivity extends AppCompatActivity {
                 return true;
             });
 
-            List<SeriesResourceDto> seriesList = new ArrayList<>(character.getSeries().getItems());
-            ListView seriesListView = findViewById(R.id.character_series_list);
-            CharacterSeriesAdapter seriesAdapter = new CharacterSeriesAdapter(this, seriesList);
-            seriesListView.setAdapter(seriesAdapter);
-
+            List<SeriesResourceDto> seriesList = new ArrayList<>(creator.getSeries().getItems());
+            ListView seriesListView = findViewById(R.id.creator_comics_list);
+            CreatorSeriesAdapter seriesListAdapter = new CreatorSeriesAdapter(this, seriesList);
+            seriesListView.setAdapter(seriesListAdapter);
+            if(seriesList.isEmpty()) {
+                LinearLayout creatorSeriesLayout = findViewById(R.id.creator_comics);
+                creatorSeriesLayout.setVisibility(View.GONE);
+            }
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        ImageView characterFavorite = findViewById(R.id.character_favorite);
+        ImageView creatorFavorite = findViewById(R.id.creator_favorite);
 
-        characterFavorite.setOnClickListener(v -> {
-            Favorite favorite = new Favorite(Type.CHARACTER, character.getId(), character.getName());
-            if (characterFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
-                characterFavorite.setImageResource(favoriteIcon);
+        creatorFavorite.setOnClickListener(v -> {
+            Favorite favorite = new Favorite(Type.CREATOR, creator.getId(), creator.getFullName());
+            if (creatorFavorite.getDrawable().getConstantState() == getDrawable(notFavoriteIcon).getConstantState()) {
+                creatorFavorite.setImageResource(favoriteIcon);
                 favoriteTableManager.addFavorite(favorite);
-                Toast.makeText(this, String.format("Added %s to favorites", character.getName()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, String.format("Added %s to favorites", creator.getFullName()), Toast.LENGTH_SHORT).show();
             } else {
-                characterFavorite.setImageResource(notFavoriteIcon);
+                creatorFavorite.setImageResource(notFavoriteIcon);
                 favoriteTableManager.removeFavorite(favorite);
-                Toast.makeText(this, String.format("Removed %s from favorites", character.getName()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, String.format("Removed %s from favorites", creator.getFullName()), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void saveImage(Bitmap bitmap) {
         fileManager.saveImageToGallery(bitmap);
-        Toast.makeText(CharacterCardActivity.this, "Image saved to gallery", Toast.LENGTH_SHORT).show();
+        Toast.makeText(CreatorCardActivity.this, "Image saved to gallery", Toast.LENGTH_SHORT).show();
     }
 
     @Override

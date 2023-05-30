@@ -50,6 +50,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.creators.CreatorCardActivity"
+            android:exported="false"
+            android:label="CreatorCardActivity"
+            android:theme="@style/Theme.Marvel">
+            <intent-filter>
+                <action android:name="pl.wsei.marvel.ACTION_VIEW_CREATOR" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

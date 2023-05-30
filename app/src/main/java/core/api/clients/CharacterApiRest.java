@@ -10,7 +10,8 @@ import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 public interface CharacterApiRest {
-    @GET("characters") Call<BaseResponse<CharactersDto>> getCharacters(
+    @GET("characters")
+    Call<BaseResponse<CharactersDto>> getCharacters(
             @QueryMap Map<String, Object> characterFilter);
 
     @GET("characters/{id}")

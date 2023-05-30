@@ -6,6 +6,7 @@ import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import core.api.models.DTOs.SeriesDto;
 import core.api.models.SerieRow;
 import core.api.queries.SeriesQuery;
 import core.api.utils.ApiKeysManager;
+import pl.wsei.marvel.R;
 import pl.wsei.marvel.adapters.ComicAdapter;
 import pl.wsei.marvel.cache.SeriesCacheSingleton;
 import pl.wsei.marvel.databinding.FragmentComicsBinding;
@@ -39,6 +41,7 @@ public class ComicsFragment extends Fragment {
     private List<SerieRow> series = new ArrayList<>();
     private ComicAdapter adapter;
     private LruCache<String, List<SerieRow>> cache;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -57,6 +60,8 @@ public class ComicsFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         binding.comicsRecyclerView.setLayoutManager(layoutManager);
         binding.comicsRecyclerView.setAdapter(adapter);
+        progressBar = binding.progressBar;
+        showProgressBar();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -80,30 +85,51 @@ public class ComicsFragment extends Fragment {
 
             future = executorService.submit(callable);
 
-            try {
-                BaseResponse<SeriesDto> all = future.get();
+            executorService.execute(() -> {
+                try {
+                    BaseResponse<SeriesDto> all = future.get();
 
-                getActivity().runOnUiThread(() -> {
-                    List<SerieDto> serieDtos = all.getResponse().getSeries();
-                    for (SerieDto serieDto : serieDtos) {
-                        SerieRow serieRow = new SerieRow(serieDto.getId(), serieDto.getTitle(), serieDto.getDescription(), serieDto.getThumbnail().getPath() + "." + serieDto.getThumbnail().getExtension());
-                        series.add(serieRow);
+                    getActivity().runOnUiThread(() -> {
+                        List<SerieDto> serieDtos = all.getResponse().getSeries();
+                        for (SerieDto serieDto : serieDtos) {
+                            SerieRow serieRow = new SerieRow(serieDto.getId(), serieDto.getTitle(), serieDto.getDescription(), serieDto.getThumbnail().getPath() + "." + serieDto.getThumbnail().getExtension());
+                            series.add(serieRow);
+                        }
+                        cache.put("series", series);
+                        adapter.updateData(series);
+                        hideProgressBar();
+                    });
+                } catch (HttpException e) {
+                    if (e.code() == 401) {
+                        getActivity().runOnUiThread(() -> {
+                            Toast.makeText(getActivity(), "Unauthorized. Check if your API Key is correct", Toast.LENGTH_SHORT).show();
+                            adapter.updateData(new ArrayList<>());
+                            hideProgressBar();
+                        });
+                    } else {
+                        throw new RuntimeException(e);
                     }
-                    cache.put("series", series);
-                    adapter.updateData(series);
-                });
-            } catch (HttpException e) {
-                if (e.code() == 401) {
-                    Toast.makeText(getActivity(), "Unauthorized. Check if your API Key is correct", Toast.LENGTH_SHORT).show();
-                    adapter.updateData(new ArrayList<>());
-                } else {
-                    throw new RuntimeException(e);
+                } catch (ExecutionException | InterruptedException e) {
+                    getActivity().runOnUiThread(() -> {
+                        Log.e("ComicsFragment", "Error while fetching data from API", e);
+                        hideProgressBar();
+                    });
                 }
-            } catch (ExecutionException | InterruptedException e) {
-                Log.e("ComicsFragment", "Error while fetching data from API", e);
-            }
+            });
         }
 
         return root;
+    }
+
+    private void showProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 }

@@ -39,12 +39,12 @@ public class ComicCreatorsAdapter extends ArrayAdapter<CreatorResourceDto> {
         final TextView creatorTextView = view.findViewById(R.id.comic_creator_name);
         creatorTextView.setText(creatorName + " (" + creatorRole + ")");
 
-//        creatorTextView.setOnClickListener(v -> {
-//            final Intent intent = new Intent(this.context, pl.wsei.marvel.ui.creators.CreatorCardActivity.class);
-//            intent.putExtra("id", creatorId);
-//            intent.putExtra("name", creatorName);
-//            this.context.startActivity(intent);
-//        });
+        creatorTextView.setOnClickListener(v -> {
+            final Intent intent = new Intent(this.context, pl.wsei.marvel.ui.creators.CreatorCardActivity.class);
+            intent.putExtra("id", creatorId);
+            intent.putExtra("name", creatorName);
+            this.context.startActivity(intent);
+        });
 
         return view;
     }

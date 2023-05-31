@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class AuthHashGenerator {
-    String generateHash(final String timestamp, final String publicKey, final String privateKey)
+    public String generateHash(final String timestamp, final String publicKey, final String privateKey)
     throws RuntimeException {
         try {
             final String value = timestamp + privateKey + publicKey;

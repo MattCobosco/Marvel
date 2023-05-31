@@ -74,8 +74,8 @@ public class NavigationActivity extends AppCompatActivity {
         if (id == R.id.action_info) {
             PopupWindow popupWindow = new PopupWindow(this);
 
-            popupWindow.setWidth(700);
-            popupWindow.setHeight(1150);
+            popupWindow.setWidth(1000);
+            popupWindow.setHeight(1400);
             popupWindow.setBackgroundDrawable(getDrawable(R.drawable.popup_background));
             View popupView = LayoutInflater.from(this).inflate(R.layout.info_popup, null);
 

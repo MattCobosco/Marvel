@@ -54,7 +54,7 @@
     </string>
     <string name="info">Info</string>
     <string name="settings">Settings</string>
-    <string name="app_description">The Marvel Character Library is a mobile application that allows users to easily access and view data from the Marvel API, which is a comprehensive database of information about characters, comics, and events in the Marvel universe. With this app, Marvel fans can browse through an extensive collection of information, including character biographies, comic book summaries, and event details, all conveniently accessible from their mobile device.</string>
+    <string name="app_description">The Marvel Character Library is a mobile application that allows users to easily access and view data from the Marvel API, which is a comprehensive database of information about characters, comics, and events in the Marvel universe.\n\nFeatures include:\n\u2022 Viewing a list of characters, comics, and creators\n\u2022 Viewing details about a specific character, comic, or creator\n\u2022 Saving images to the device\n\u2022 Adding and removing characters, comics, and creators to and from a favorites list\n\u2022 Viewing a list of favorites\n\u2022 Viewing a list of recently viewed items\n\u2022 Caching of data for faster loading times\n\u2022 Clearing of cache and favorites\n\u2022 Turning on and off the history feature\n</string>
     <string name="private_key">Private Key</string>
     <string name="public_key">Public Key</string>
     <string name="clear_favorites">Clear favorites</string>

@@ -74,4 +74,32 @@ public class ApiKeysManager {
             Log.e(TAG, "Error saving API keys", e);
         }
     }
+
+    public String getTAG() {
+        return TAG;
+    }
+
+    public String getAPIKEY_FILENAME() {
+        return APIKEY_FILENAME;
+    }
+
+    public String getPUBLIC_KEY_PROP() {
+        return PUBLIC_KEY_PROP;
+    }
+
+    public String getPRIVATE_KEY_PROP() {
+        return PRIVATE_KEY_PROP;
+    }
+
+    public String getDEFAULT_PUBLIC_KEY() {
+        return DEFAULT_PUBLIC_KEY;
+    }
+
+    public String getDEFAULT_PRIVATE_KEY() {
+        return DEFAULT_PRIVATE_KEY;
+    }
+
+    public Context getContext() {
+        return context;
+    }
 }

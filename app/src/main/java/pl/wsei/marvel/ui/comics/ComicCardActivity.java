@@ -22,16 +22,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
-import core.MarvelApiConfig;
+import core.api.MarvelApiConfig;
 import core.api.clients.SeriesClient;
 import core.api.models.DTOs.BaseResponse;
 import core.api.models.DTOs.CharacterResourceDto;
 import core.api.models.DTOs.CreatorResourceDto;
 import core.api.models.DTOs.ImageDto;
-import core.api.models.DTOs.ResourceDto;
-import core.api.models.DTOs.ResourcesDto;
 import core.api.models.DTOs.SerieDto;
 import core.api.utils.ApiKeysManager;
 import core.db.FavoriteTableManager;
@@ -45,7 +42,6 @@ import core.utils.PermissionManager;
 import pl.wsei.marvel.R;
 import pl.wsei.marvel.adapters.ComicCharactersAdapter;
 import pl.wsei.marvel.adapters.ComicCreatorsAdapter;
-import pl.wsei.marvel.ui.characters.CharacterCardActivity;
 
 public class ComicCardActivity extends AppCompatActivity {
     private ApiKeysManager apiKeysManager;

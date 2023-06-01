@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import core.MarvelApiConfig;
+import core.api.MarvelApiConfig;
 import core.api.clients.CreatorClient;
 import core.api.models.DTOs.BaseResponse;
 import core.api.models.DTOs.CreatorDto;

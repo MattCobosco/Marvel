@@ -1,4 +1,4 @@
-package pl.wsei.marvel;
+package core.utils;
 
 import core.enums.Type;
 import pl.wsei.marvel.R;

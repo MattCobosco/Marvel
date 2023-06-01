@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import core.MarvelApiConfig;
+import core.api.MarvelApiConfig;
 import core.api.clients.SeriesClient;
 import core.api.models.DTOs.BaseResponse;
 import core.api.models.DTOs.SerieDto;
@@ -30,7 +30,6 @@ import core.api.models.DTOs.SeriesDto;
 import core.api.models.SerieRow;
 import core.api.queries.SeriesQuery;
 import core.api.utils.ApiKeysManager;
-import pl.wsei.marvel.R;
 import pl.wsei.marvel.adapters.ComicAdapter;
 import pl.wsei.marvel.cache.SeriesCacheSingleton;
 import pl.wsei.marvel.databinding.FragmentComicsBinding;

@@ -12,7 +12,7 @@ import java.util.List;
 
 import core.db.models.HistoryEntry;
 import pl.wsei.marvel.R;
-import pl.wsei.marvel.TypeToIconDictionary;
+import core.utils.TypeToIconDictionary;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
     private final List<HistoryEntry> historyList;

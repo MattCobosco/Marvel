@@ -1,4 +1,4 @@
-package core;
+package core.api;
 
 import core.utils.AuthInterceptor;
 import core.utils.TimeProvider;

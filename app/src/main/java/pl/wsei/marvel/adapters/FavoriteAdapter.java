@@ -16,7 +16,7 @@ import core.db.models.Favorite;
 import core.enums.Type;
 import core.utils.IntentFactory;
 import pl.wsei.marvel.R;
-import pl.wsei.marvel.TypeToIconDictionary;
+import core.utils.TypeToIconDictionary;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavoritesViewHolder> {
     private final List<Favorite> favorites;

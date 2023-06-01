@@ -2,7 +2,7 @@ package core.api.clients;
 
 import java.io.IOException;
 
-import core.MarvelApiConfig;
+import core.api.MarvelApiConfig;
 import retrofit2.Call;
 import retrofit2.HttpException;
 import retrofit2.Response;

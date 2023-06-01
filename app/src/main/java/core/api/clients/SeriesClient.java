@@ -3,7 +3,7 @@ package core.api.clients;
 import java.io.IOException;
 import java.util.Map;
 
-import core.MarvelApiConfig;
+import core.api.MarvelApiConfig;
 import core.api.models.DTOs.BaseResponse;
 import core.api.models.DTOs.SerieDto;
 import core.api.models.DTOs.SeriesDto;

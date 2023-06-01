@@ -19,7 +19,7 @@ import pl.wsei.marvel.R;
 import core.utils.TypeToIconDictionary;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavoritesViewHolder> {
-    private final List<Favorite> favorites;
+    private List<Favorite> favorites;
 
     public FavoriteAdapter(List<Favorite> favorites) {
         this.favorites = favorites;
@@ -69,5 +69,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
             idTextView = view.findViewById(R.id.favorite_id_text_view);
             nameTextView = view.findViewById(R.id.favorite_name_text_view);
         }
+    }
+
+    public void updateFavorites(List<Favorite> newFavorites) {
+        this.favorites = newFavorites;
     }
 }

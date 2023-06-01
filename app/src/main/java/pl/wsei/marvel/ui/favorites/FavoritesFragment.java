@@ -42,4 +42,13 @@ public class FavoritesFragment extends Fragment {
 
         return root;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String[] params = {"type", "name"};
+        favorites = favoriteTableManager.getAllFavorites(params);
+        adapter.updateFavorites(favorites);
+        adapter.notifyDataSetChanged();
+    }
 }

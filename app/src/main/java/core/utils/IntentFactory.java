@@ -34,6 +34,4 @@ public class IntentFactory {
                 return null;
         }
     }
-
-
 }

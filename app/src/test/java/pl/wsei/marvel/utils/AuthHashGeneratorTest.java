@@ -1,4 +1,4 @@
-package pl.wsei.marvel;
+package pl.wsei.marvel.utils;
 
 import static org.junit.Assert.assertEquals;
 
